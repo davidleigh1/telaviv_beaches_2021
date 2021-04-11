@@ -1,5 +1,5 @@
 tlv_vars = {
-	"version": "220617-2.0",
+	"version": "120421-3.0",
 	"isMobile": undefined,
 	"feedbackTel": "+972544584417",
 	"feedbackEmail": "davidleigh1@gmail.com",
@@ -183,7 +183,7 @@ tlv_data = [
 		"approx_address": "יצחק ארצי 34, תל אביב",
 		"restaurants": ["כחול"],
 		"notes_access": "חוף תל ברוך מחולק לשני חלקים, הצפוני והדרומי, ביניהם ישנו שובר גלים וסוכם מציל. רחצה מותרת בחוף הצפוני. בחוף הדרומי שי אזור לפיקניק וגישה לחוף הכלבים וחוף העפיפונים",
-		"landmarks": ["סוכת מציל #23"]
+		"landmarks": ["סוכת מציל #23 #11"]
 	},
 	"name": "Tel Baruch",
 	"lat": "32.121111",
@@ -197,7 +197,7 @@ tlv_data = [
 	"restaurants": ["Blue"],
 	"hotels": [],
 	"notes_access": "Tel Baruch has a North and South beach divided by a breakwater and lifeguard station. Swimming is permitted on the North beach. South beach has a BBQ area and access to kite and dog beaches.",
-	"landmarks": ["Lifeguard Hut #23"],
+	"landmarks": ["Lifeguard Hut #23 #11"],
 	"has_lifeguard": true,
 	"is_official": true,
 	"has_gates": false,
