@@ -1,0 +1,352 @@
+.uh-logo {
+	height: 3em;
+	position: relative;
+	top: 5px;
+	left: 0px;
+	float: left;
+	padding: 2px 8px;    
+}
+
+.row {
+	margin: auto;
+	width: 100%;
+}
+
+div .container {
+	padding-right: 0;
+	padding-left: 0;
+}
+
+
+.nolink {
+	text-decoration: none !important;
+}
+
+/* ==========================================================================
+   Author's custom styles
+
+ICONS
+http://www.iconninja.com/tag/directions-icon
+http://www.iconarchive.com/search?q=directions
+LATLON
+http://www.mapcoordinates.net/en
+
+UH New Orange: #F17920;
+
+   ========================================================================== */
+
+@media (max-width: 768px) {
+	.navbar {
+		box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);
+	}
+}
+
+/* Search Button */
+.searchButton {
+  position: absolute;
+  top: 0px;
+  right: 15px;
+}
+@media (max-width: 767px) {
+  .searchButton {
+	right: 110px;
+  }
+}
+
+/* Filter Button */
+.filterButton {
+	position: absolute;
+	top: 0px;
+	right: 65px;
+}
+@media (max-width: 767px) {
+	.filterButton {
+		right: 75px;
+  }
+}
+
+/*.navbar .login-btn {
+  position: absolute;
+  top: 0px;
+  right: 15px;
+}
+@media (max-width: 767px) {
+  .navbar .login-btn {
+	right: 75px;
+  }
+}*/
+
+.pull-right {
+	text-align: right !important;
+}
+
+.pull-left {
+	text-align: left !important;
+}
+
+button.searchButton, button.filterButton {
+	/* padding: 9px 10px; */
+	margin-top: 8px;
+	margin-right: 10px;
+	margin-bottom: 8px;
+	background-color: transparent;
+	/* background-image: none; */
+	border: 1px solid transparent;
+	border-radius: 4px;
+	height: 34px;
+	width: 34px;
+	color: white;
+	/* border: 1px solid white; */
+	font-size: 120%;
+} 
+
+/* Flag Icon */
+button.toggleLang img {
+   /* height: 24px;*/
+}
+
+/* Flag Button */
+button.toggleLang, button.filterButtonMenu {
+	padding: 0 5px;
+	height: 34px;
+	width: 42px;
+}
+
+/* SEARCHBAR */
+
+.searchbar {
+	height: 60px;
+	padding: 15px 15px 5px 15px;
+}
+
+#searchfield {
+	/*width: 90%;*/
+}
+
+/* FILTERBAR */
+
+.filterbar {
+	display: none;      /* Hidden intially */
+	height: 60px;
+	padding: 5px 15px 5px 15px;
+}
+
+.filter-icon {
+	margin-right: 5px;
+	margin-left: 5px;
+}
+
+/* TOGGLES */
+
+.filter-toggle.btn-default:active,
+.filter-toggle.btn-default.active {
+	/*color: #333;*/
+	/*background-color: #F17920;*/
+	/*border-color: #adadad;*/
+/*    border: 1px solid #3c763d;
+	background-color: rgba(60, 118, 61, 0.2);
+	color: #3c763d;
+	font-weight: bold;*/
+}
+
+.btn.filter-toggle {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+
+button.filter-toggle.btn-custom {
+	background-color: white;
+	border: #cccccc 1px solid !important;
+	outline-color: transparent !important; 
+	outline-style: none !important; 
+	-webkit-box-shadow: none !important;
+	box-shadow: inset none !important;    
+}
+
+/* Remove blue glow */
+button.filter-toggle.btn-custom:active, 
+button.filter-toggle.btn-custom:focus, 
+button.filter-toggle.btn-custom:hover {
+	background-color: white;
+	border: #cccccc 1px solid !important;
+	outline-color: transparent !important; 
+	outline-style: none !important;
+}
+
+button.filter-toggle.btn-custom.active {
+	background-color: #8BC34A;
+}
+
+
+.minitron {
+	padding: 5px 15px;
+	margin-bottom: 10px 0;
+	color: inherit;
+	background-color: #eee
+}
+
+.compass-icon {
+	position: relative;
+	top: 0;
+	left: 0;
+	height: 18px;
+}
+
+.place-wrapper {
+	/*border: 1px solid rgba(96, 125, 139, 0.5);*/
+	/* font-size: 0.9em; */
+	/* padding-top: 10px; */
+	margin-bottom: 10px;
+	border-radius: 5px;
+	margin: 4px;
+	/* padding-bottom: 10px; */
+}
+
+.place-line {
+	/* border-bottom: 0.5px solid #eee; */
+	cursor: help;
+	font-size: 0.9em;
+	border-radius: 4px;
+	/* margin-bottom: 10px; */
+	/* margin: 6px; */
+	/* position: relative; */
+	/* min-height: 1px; */
+	padding-top: 15px;
+	padding-right: 10px;
+	padding-left: 10px;    
+	padding-bottom: 15px;
+}
+
+.place-icon {
+	/* The pointer-events: none; prevents the this DIV from blocking the event handler for the accordian */
+	/*pointer-events: none;*/
+	position: relative;
+	top: -3px;
+	left: -3px;
+	right: -3px;
+	padding-right: 5px;
+	padding-left: 5px;
+	height: 24px;
+}
+
+.place-name {
+	/* The pointer-events: none; prevents the this DIV from blocking the event handler for the accordian */
+	/*pointer-events: none;    */
+	font-size: 1.3em;
+}
+
+.place-subtitle {
+	display: none;
+}
+
+.place-detail {
+	padding: 10px;
+}
+
+.place-detail.right-col {
+	text-align: right;
+	/*float: right;*/
+}
+
+div.place-line.park {
+	background-color: hsla(120, 100%, 25%, 0.2);
+}
+
+div.place-line.beach_official {
+	/*background-color: #6d6dff;*/
+	/*background-color: #b5b5ff;*/
+	background-color: #03A9F4;
+}
+
+div.place-line.beach_unofficial {
+	/*background-color: #009688;*/
+	background-color: #abcdef;
+}
+
+div.place-line.restaurant {
+	background-color: hsla(36, 100%, 50%, 0.21);
+}
+
+div.place-line.landmark {
+	background-color: hsl(0, 0%, 82%);
+}
+
+.route-icon {
+	height: 24px;
+	cursor: pointer;
+	margin-left: 20px;
+	margin-right: 10px;	
+}
+
+.pointer {
+	cursor: pointer;
+}
+
+/* PLACE LINE - SELECTED */
+
+.selected.place-wrapper {
+	border: medium #F17920 solid !important;
+	border-top: initial !important;
+}
+.selected .place-line {
+	background-color: #F17920 !important;
+	font-weight: bold !important;
+}
+
+
+/* Columns in Info Panel for each Place */
+
+.info_panel {
+	width: 100%;
+}
+
+span.info-item {
+	display: block;
+}
+
+span.info-item.facilities {
+	display: inline-block;
+	text-align: center;
+	width: 50px;
+	border-radius: 5px;
+	margin: 2px;
+	padding: 0 4px;
+	vertical-align: middle;
+	height: 32px;
+	line-height: 26px;
+}
+
+span.info-item.success {
+	border: 2px solid #3c763d;
+	background-color: rgba(60, 118, 61, 0.2);
+	color: #3c763d;
+}
+span.info-item.danger {
+	border: 2px solid #a94442;
+	background-color: rgba(169, 68, 66, 0.2);
+	color: #a94442;
+	opacity: 0.3;
+}
+
+
+
+.row.row-eq-height {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display:         flex;    
+}
+
+.top-info-row {
+	/*background-color: orange;*/
+}
+
+.bottom-info-row {
+	/*background-color: pink;*/
+	background-color: rgba(211, 211, 211, 0.2);
+}
+
+span.info-feedback {
+	display: block;
+	font-size: 0.8em;
+}
