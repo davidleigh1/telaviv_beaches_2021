@@ -354,10 +354,30 @@ span.info-feedback {
 
 
 /* tlv.works logo */
-.tlv {}
+.tlv-logo {
+     color: black;
+}
+
+a.tlv-link:visited,
+a.tlv-link:link {
+     text-decoration: none;
+}
+
+a.tlv-link:hover,
+a.tlv-link:active {
+     text-decoration: none;
+     color: blue;
+     /* background-color: black; */
+}
+
+
+.tlv {
+     font-weight: 900;
+}
 
 .tlv-dot {
-     font-weight: 900;
+     /* font-weight: 900; */
+     color:blue;
 }
 
 .tlv-heart {
@@ -366,7 +386,7 @@ span.info-feedback {
 }
 
 .tlv-strapline {
-     font-size: x-small;
+     /* font-size: x-small; */
      text-transform: initial;
      /* background-color: rgb(240 240 240 / 80%); */
      text-align: center;
