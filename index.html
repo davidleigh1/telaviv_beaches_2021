@@ -45,13 +45,7 @@
 								padding-bottom: 20px;
 						}
 				</style>
-				<!-- Disabled for optimization
-				<link rel="stylesheet" href="css/bootstrap-theme.min.css">
-				-->
-				<link rel="stylesheet" href="css/main.css">
-				<!-- Disabled for optimization
-				<script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script> 
-				-->	
+                    <link rel="stylesheet" href="css/main.css">
 		</head>
 		<body>
 
@@ -81,71 +75,21 @@
 					<form class="navbar-form navbar-right" role="form">
 
 					<!-- The type="button" is to prevent the button (which is default type 'submit' from submitting the form) -->
-					<!-- <button type="button" class="btn btn-default searchButton closeOnClick">Search</button> -->
-					<!-- <button type="button" class="btn btn-info openWiki closeOnClick">TLV Wiki</button> -->
-					<!-- <button type="button" class="btn btn-default filterButtonMenu closeOnClick"><i class="fa fa-lg fa-fw fa-filter"></i></button> -->
 					<button type="button" class="btn btn-default toggleLang closeOnClick"><img class="flag-icon he" hidden="hidden" height="32px" width="32px" title="EN" src="img/icons/uk_32.png"><img class="flag-icon en" hidden="hidden" height="32px" width="32px" title="HE" src="img/icons/il_32.png"></button>
 					</form>
 				</div><!--/.navbar-collapse -->
 
-			<!-- <button type="submit" class="btn btn-danger navbar-btn login-btn closeOnClick">Sign In</button> -->
 			<button class="filterButton"><i class="fa fa-lg fa-filter" ></i></button>
 			<button class="searchButton"><i class="fa fa-search" ></i></button>
 			</div>
 		</nav>
 
-		<div class="searchbar" id="search">
-			<!-- <form class="" role="form"> -->
-				<!-- <div class="search container"> -->
-					<!-- <input type="text" id="searchfield" placeholder="Search" class="form-control"> -->
-					<input type="text" id="searchfield" class="form-control" onkeyup="simpleSearch()" autofocus="autofocus">
-				<!-- </div> -->
-			<!-- </form> -->
+
+          <div class="searchbar" id="search">
+               <input type="text" id="searchfield" class="form-control" onkeyup="simpleSearch()" autofocus="autofocus">
 		</div>
 
-		<!-- <label class="filter-label">Filter:</label> -->
-		<!--
-		<div class="filterbar" id="filter2">
-			<div class="btn-group btn-group-justified" data-toggle="buttons">
-		
-				<label class="active btn btn-default btn-sm filter-button beach_official" data-type="beach_official">
-					<input type="checkbox" id="filter_beach_official" autocomplete="off">
-					<span class="en filter-text-label hidden-xs"> Beach (official)</span>
-					<img class="filter-icon beach_official" width="24px" height="24px" src="img/icons/beach.png">
-					<span class="he filter-text-label hidden-xs"> חוף (רשמי)</span>
-				</label>
-				<label class="active btn btn-default btn-sm filter-button beach_unofficial" data-type="beach_unofficial">
-					<input type="checkbox" id="filter_beach_unofficial" autocomplete="off">
-					<span class="en filter-text-label hidden-xs"> Beach (unofficial)</span>
-					<img class="filter-icon beach_unofficial" width="24px" height="24px" src="img/icons/waves.png">
-					<span class="he filter-text-label hidden-xs"> חוף (לא רשמי)</span>
-				</label>
-				<label class="btn btn-default btn-sm filter-button park" data-type="park">
-					<input type="checkbox" id="filter_park" autocomplete="off">
-					<span class="en filter-text-label hidden-xs"> Park</span>
-					<img class="filter-icon park" width="24px" height="24px" src="img/icons/park.png">
-					<span class="he filter-text-label hidden-xs"> גנים ציבוריים</span>
-				</label>
-				<label class="btn btn-default btn-sm filter-button restaurant" data-type="restaurant">
-					<input type="checkbox" id="filter_restaurant" autocomplete="off">
-					<span class="en filter-text-label hidden-xs"> Bar/Restaurant</span>
-					<img class="filter-icon restaurant" width="24px" height="24px" src="img/icons/spoonfork.png">
-					<span class="he filter-text-label hidden-xs"> בר / מסעדה</span>
-				</label>
-				<label class="btn btn-default btn-sm filter-button landmark" data-type="landmark">
-					<input type="checkbox" id="filter_landmark" autocomplete="off">
-					<span class="en filter-text-label hidden-xs"> Landmark</span>
-					<img class="filter-icon landmark" width="24px" height="24px" src="img/icons/place.png">
-					<span class="he filter-text-label hidden-xs"> לנדמרק</span>
-				</label>
 
-
-			</div>
-		</div>	
-		-->
-			<!-- <label class="filter-label">Filter:</label> -->
-
-		
 		<div class="filterbar" id="filter">
 			<div class="btn-group btn-group-justified" data-toggle="buttons">
 
@@ -172,7 +116,7 @@
 						<img class="filter-icon beach_unofficial_port" width="24px" height="24px" src="img/icons/port_2.png">
 						<span class="en filter-text-label hidden-xs">Port/Harbour</span><span class="he filter-text-label hidden-xs">נמל / מרינה</span>
 					</button>
-				</div>				
+				</div>
 				<div class="btn-group" role="group">
 					<button class="active btn btn-custom filter-toggle park" data-type="park">
 						<img class="filter-icon park" width="24px" height="24px" src="img/icons/park.png">
@@ -213,7 +157,7 @@
 
 
 
-		</div> <!-- /container -->        
+		</div> <!-- /container -->
 
 		<div class="minitron">
 			<div class="">
@@ -239,26 +183,11 @@
 			</div>
 		</footer>
 
-
-
-		<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
-		<!-- <script src="/js/vendor/jquery-1.11.2.min.js"></script> -->
 		<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
 
 		<script src="js/vendor/bootstrap.min.js"></script>
 
 		<script src="js/main.js"></script>
 
-		<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-		<!--
-		<script>
-				(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-				function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
-				e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-				e.src='//www.google-analytics.com/analytics.js';
-				r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-				ga('create','UA-XXXXX-X','auto');ga('send','pageview');
-		</script>
-		-->
 </body>
 </html>

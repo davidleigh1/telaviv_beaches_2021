@@ -368,7 +368,7 @@ span.info-feedback {
 .tlv-strapline {
      font-size: x-small;
      text-transform: initial;
-     background-color: rgb(240 240 240 / 80%);
+     /* background-color: rgb(240 240 240 / 80%); */
      text-align: center;
      /* display: inline; */
      margin: 10px 0;
