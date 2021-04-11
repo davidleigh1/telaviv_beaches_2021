@@ -1666,7 +1666,7 @@ updateLang = function (specifyLang) {
 	$('.'+previousLang).hide();
 
 	/* Update placeholder for search field (to avoid having two search fields in the DOM) */
-	var newText = ( currentLang == 'en' ) ? 'Search Tel Aviv beaches...' : 'חפשו בחופי תל אביב ...';
+	var newText = currentLang == "en" ? "Search Tel Aviv beaches... for lifeguard huts, enter # eg #25" : "חפשו בחופי תל אביב ... עבור סוכת מציל, הקלד #+מספר (לדוגמה #25)";
 	$("#searchfield").attr("placeholder", newText);
 
 
