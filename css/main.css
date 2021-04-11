@@ -350,3 +350,32 @@ span.info-feedback {
 	display: block;
 	font-size: 0.8em;
 }
+
+
+
+/* tlv.works logo */
+.tlv {}
+
+.tlv-dot {
+     font-weight: 900;
+}
+
+.tlv-heart {
+     /* font-size: 0.8em; */
+     color: red;
+}
+
+.tlv-strapline {
+     font-size: x-small;
+     text-transform: initial;
+     background-color: rgb(240 240 240 / 80%);
+     text-align: center;
+     /* display: inline; */
+     margin: 10px 0;
+     padding: 10px 1%;
+     border-radius: 5px;
+}
+
+
+
+
