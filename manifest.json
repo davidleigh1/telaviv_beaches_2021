@@ -1,10 +1,10 @@
 {
-     "name": "Beaches UH-TLV",
-     "short_name": "Beaches TLV - United Hatzalah",
+     "name": "חופי תל אביב (איחוד הצלה)",
+     "short_name": "חופי תל אביב",
      "description": "United Hatzalah First Responder Guide to Tel Aviv Beaches",
      "theme_color": "#ff7200",
      "background_color": "#fff",
-     "display": "minimal-ui",
+     "display": "standalone",
      "orientation": "portrait",
      "start_url": "/telaviv_beaches/",
      "scope": "/telaviv_beaches/",

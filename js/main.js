@@ -47,8 +47,6 @@ tlv_template = {
 	"type": "beach_unofficial"
 }
 
-
-
 tlv_data = [
 {
 	"he": {
@@ -1384,6 +1382,118 @@ navigateTo = function (lat, lon, getIcon) {
     }
 };
 
+function share(shareThis) {
+     // alert("Share This: " + shareThis);
+     /* https://web.dev/web-share/ */
+     var shareUrl = "https://tlv.works/telaviv_beaches/?goto="+shareThis;
+     if (navigator.share) {
+          navigator
+               .share({
+                    title: "Sharing Title",
+                    text: "Check out this thing!",
+                    url: shareUrl,
+               })
+               .then(() => alert("Successful share"))
+               .catch((error) => alert("Error sharing", error));
+     } else {
+          alert("No sharing!", navigator.canShare );
+     }
+}
+
+/* ------------------------------ */
+function sleep(delay) {
+     return new Promise((resolve) => {
+          setTimeout(resolve, delay);
+     });
+}
+
+function logText(message, isError) {
+     if (isError) console.error(message);
+     else console.log(message);
+
+     // const p = document.createElement("p");
+     // if (isError) p.setAttribute("class", "error");
+     // document.querySelector("#output").appendChild(p);
+     // p.appendChild(document.createTextNode(message));
+}
+
+function logError(message) {
+     logText(message, true);
+}
+
+// function setShareButtonsEnabled(enabled) {
+//      document.querySelector("#share").disabled = !enabled;
+//      document.querySelector("#share-no-gesture").disabled = !enabled;
+// }
+
+// function checkboxChanged(e) {
+//      const checkbox = e.target;
+//      const textfield = document.querySelector("#" + checkbox.id.split("_")[0]);
+
+//      textfield.disabled = !checkbox.checked;
+//      if (!checkbox.checked) textfield.value = "";
+// }
+
+async function testWebShare(gotoAnchor,name) {
+     const title_input = "Share a Tel Aviv Beach Location";
+     const text_input = "*" + name + "*";
+     const url_input = "https://tlv.works/telaviv_beaches/?goto="+gotoAnchor;
+
+     const title = title_input.value;
+     const text = text_input.value;
+     const url = url_input.value;
+
+     // if (files && files.length > 0) {
+     //      if (!navigator.canShare) {
+     //           logError("Error: Unsupported feature: navigator.canShare()");
+     //           // setShareButtonsEnabled(true);
+     //           return;
+     //      }
+     // }
+
+     // setShareButtonsEnabled(false);
+     try {
+          await navigator.share({ title:title_input, text:text_input, url:url_input });
+          // alert("Successfully sent share");
+     } catch (error) {
+          alert("Error sharing: " + error);
+     }
+     // setShareButtonsEnabled(true);
+}
+
+async function testWebShareDelay() {
+     // setShareButtonsEnabled(false);
+     await sleep(6000);
+     testWebShare();
+}
+
+function onLoad() {
+     // // Checkboxes disable and delete textfields.
+     // document.querySelector("#title_checkbox").addEventListener("click", checkboxChanged);
+     // document.querySelector("#text_checkbox").addEventListener("click", checkboxChanged);
+     // document.querySelector("#url_checkbox").addEventListener("click", checkboxChanged);
+
+     // document.querySelector("#share").addEventListener("click", testWebShare);
+     // document.querySelector("#share-no-gesture").addEventListener("click", testWebShareDelay);
+
+     if (navigator.share === undefined) {
+          setShareButtonsEnabled(false);
+          if (window.location.protocol === "http:") {
+               // navigator.share() is only available in secure contexts.
+               window.location.replace(window.location.href.replace(/^http:/, "https:"));
+          } else {
+               logError("Error: You need to use a browser that supports this draft " + "proposal.");
+          }
+     }
+}
+/* ------------------------------ */
+
+
+
+
+
+
+
 getString = function (thisPlaceObj, placeAttribute, lang = "en", iconHTML) {
 	//console.log('getString()', thisPlaceObj, placeAttribute, lang);
 	var returnString;
@@ -1604,9 +1714,6 @@ createTableFromData = function (data) {
 						buildArray( data[i], "parking", "he", '<i class="fa fa-fw fa-product-hunt"></i>' ) + 
 				'</div>' +
 
-
-
-
 				/* SECOND LINE - RIGHT COLUMN */
 				'<div class="place-detail right-col col-xs-4 pull-right">' + 
 						buildBoolean( data[i].on_foot_only, '<img class="facilities-icon" src="img/icons/by_foot_success.png">' ) + 
@@ -1616,8 +1723,17 @@ createTableFromData = function (data) {
 						buildBoolean( data[i].has_firstaid, '<i class="fa fa-2x fa-fw fa-medkit"></i>' ) + 
 						buildFeedbackLink ( data[i], en_name, he_name ) +
 				'</div>' +
-
 			'</div>' +
+               /* SHARE LINE  */
+               '<div class="share-info-row row row-eq-height place-row">' +
+                    '<button class="place-share-button en" data-place="info_panel_'+i+'" onclick="testWebShare(\'info_panel_' + i + '\',\'' + en_name + '\')">'+
+                         '<i class="fa fa-fw fa-share-alt"></i> Click here to share' +
+                    '</button>' +
+                    '<div class="place-share-button he" data-place="info_panel_'+i+'" onclick="testWebShare(\'info_panel_' + i + '\',\'' + he_name + '\')">'+
+                         'לחצו כאן לשיתוף <i class="fa fa-fw fa-share-alt-square"></i>' +
+                    '</div>' +
+               '</div>' +
+
 		'</div>';
 
 		/* PLACE LINE + COMPLILATION */
@@ -1666,7 +1782,7 @@ updateLang = function (specifyLang) {
 	$('.'+previousLang).hide();
 
 	/* Update placeholder for search field (to avoid having two search fields in the DOM) */
-	var newText = currentLang == "en" ? "Search Tel Aviv beaches... for lifeguard huts, enter # eg #25" : "חפשו בחופי תל אביב ... עבור סוכת מציל, הקלד #+מספר (לדוגמה #25)";
+	var newText = currentLang == "en" ? "Search... for lifeguard huts, type #.. eg #25" : "חפשו... עבור סוכת מציל, הקלד #+מספר (לדוגמה #25)";
 	$("#searchfield").attr("placeholder", newText);
 
 
@@ -1694,90 +1810,112 @@ updateLang = function (specifyLang) {
 // });
 
 $( document ).ready(function() {
-	// console.log('ready');
+     // console.log('ready');
 
-	tlv_vars.isMobile = isMobile();
+     tlv_vars.isMobile = isMobile();
 
-	/* DOM GENERATION */
-		var textToAppend = createTableFromData(tlv_data);
-		$('#myAccordian').replaceWith(textToAppend);
+     /* DOM GENERATION */
+     var textToAppend = createTableFromData(tlv_data);
+     $("#myAccordian").replaceWith(textToAppend);
 
-	/* Scroll to hide search */
-	window.scroll(0, 60);
+     /* Scroll to hide search */
+     window.scroll(0, 60);
 
+     /* Simulate effect of click to hide the non-selected language */
 
-	/* Simulate effect of click to hide the non-selected language */
-		if ( !$('html').attr('lang') ){
-			updateLang("he");
-		}
+     var queryVars = Object.fromEntries([...new URLSearchParams(location.search)]);
+     console.log("queryVars:", queryVars);
 
-	/* EVENT HANDLERS */
+     if (["en", "he"].includes(queryVars.lang)) {
+          updateLang(queryVars.lang);
+     } else if (!$("html").attr("lang")) {
+          updateLang("he");
+     }
 
-		/* Open Wiki */
-		$( ".openWiki" ).click(function(e) {
-			window.open("http://ems.1221tlv.org/", "_blank");
-		});
+     /* Handle any ?goto= parameters on incoming URL */
 
-		/* Change Language */
-		$( ".toggleLang" ).click(function(e) {
-			updateLang();
-		});
+     // if (!!queryVars.goto) {
+     //      console.log("queryVars.goto found!", queryVars.goto);
+     //      $('[data-target="#' + queryVars.goto + '"]').trigger("click");
+     // } else {
+     //      console.log("queryVars.goto NOT found!", queryVars);
+     // }
 
-		/* Close Menu */
-		$( ".closeOnClick" ).click(function(e) {
-			$('.navbar-toggle').click();
-		});
+     /* EVENT HANDLERS */
 
-		/* searchButton */
-		$( ".searchButton" ).click(function(e) {
-			e.stopPropagation();
-			window.scroll(0, 0);
-			$('#searchfield').focus();
-		});
+     /* Open Wiki */
+     // $( ".openWiki" ).click(function(e) {
+     // 	window.open("http://ems.1221tlv.org/", "_blank");
+     // });
 
-		/* filterButtonMenu (show/hide the filterbar containing filter-toggles) */
-		$( "button.filterButtonMenu" ).click(function(e) {
-			e.stopPropagation();
-			$(".filterbar").toggle("fast", function() {});			
-			window.scroll(0, 0);
-		});
-		$( "button.filterButton" ).click(function(e) {
-			e.stopPropagation();
-			$(".filterbar").toggle("fast", function() {});			
-			window.scroll(0, 0);
-		});
-		$( ".filter-toggle" ).click(function(e) {
-			clickEvent = e;
-			//console.log(e.currentTarget.dataset.type, $( e.currentTarget ).hasClass('active') );
-			$( "div.place-wrapper." + e.currentTarget.dataset.type ).toggle("fast", function() {});
-		});
+     /* Change Language */
+     $(".toggleLang").click(function (e) {
+          updateLang();
+     });
 
-		/* Accordian */
-		// $( ".place-wrapper" ).click(function(e) {
-		$( ".place-line" ).click(function(e) {
-			var thisInfo = e.currentTarget.dataset.target;
-			var thisWrapper = e.currentTarget.parentElement;
-			if (thisInfo) {
-				if ( $(thisInfo).hasClass('in') ){
-					/* Hide info if open already and clicked again */
-					$('.collapse').removeClass('in');
-					$('.place-wrapper').removeClass('selected');
-				} else {
-					/* Otherwise close all and open new info div */
-					$('.collapse').removeClass('in');
-					$('.place-wrapper').removeClass('selected');
-					$(thisInfo).addClass('in');
-					$(thisWrapper).addClass('selected');
+     /* Close Menu */
+     $(".closeOnClick").click(function (e) {
+          $(".navbar-toggle").click();
+     });
 
+     /* searchButton */
+     $(".searchButton").click(function (e) {
+          e.stopPropagation();
+          window.scroll(0, 0);
+          $("#searchfield").focus();
+     });
 
-					/* Scroll to info div */
-					$('html, body').animate({
-						scrollTop: $(thisInfo).offset().top-173
-					}, 100);
+     /* filterButtonMenu (show/hide the filterbar containing filter-toggles) */
+     $("button.filterButtonMenu").click(function (e) {
+          e.stopPropagation();
+          $(".filterbar").toggle("fast", function () {});
+          window.scroll(0, 0);
+     });
+     $("button.filterButton").click(function (e) {
+          e.stopPropagation();
+          $(".filterbar").toggle("fast", function () {});
+          window.scroll(0, 0);
+     });
+     $(".filter-toggle").click(function (e) {
+          clickEvent = e;
+          //console.log(e.currentTarget.dataset.type, $( e.currentTarget ).hasClass('active') );
+          $("div.place-wrapper." + e.currentTarget.dataset.type).toggle("fast", function () {});
+     });
 
+     /* Accordian */
+     // $( ".place-wrapper" ).click(function(e) {
+     $(".place-line").click(function (e) {
+          var thisInfo = e.currentTarget.dataset.target;
+          var thisWrapper = e.currentTarget.parentElement;
+          if (thisInfo) {
+               if ($(thisInfo).hasClass("in")) {
+                    /* Hide info if open already and clicked again */
+                    $(".collapse").removeClass("in");
+                    $(".place-wrapper").removeClass("selected");
+               } else {
+                    /* Otherwise close all and open new info div */
+                    $(".collapse").removeClass("in");
+                    $(".place-wrapper").removeClass("selected");
+                    $(thisInfo).addClass("in");
+                    $(thisWrapper).addClass("selected");
 
-				}
-			}
-		});
+                    /* Scroll to info div */
+                    $("html, body").animate(
+                         {
+                              scrollTop: $(thisInfo).offset().top - 173,
+                         },
+                         100
+                    );
+               }
+          }
+     });
 
+     /* Handle any ?goto= parameters on incoming URL */
+
+     if (!!queryVars.goto) {
+          console.log("queryVars.goto found!", queryVars.goto);
+          $('[data-target="#' + queryVars.goto + '"]').trigger("click");
+     } else {
+          console.log("queryVars.goto NOT found!", queryVars);
+     }
 });
