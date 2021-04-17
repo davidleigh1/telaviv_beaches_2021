@@ -1323,6 +1323,32 @@ tlv_data = [
 }
 ];
 
+// var cookie_name = "i18n_lang";
+// var default_lang = "en";
+
+function setCookie(cname, cvalue, exdays) {
+     console.log("setCookie()", cname, cvalue, exdays);
+     var d = new Date();
+     d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+     var expires = "expires=" + d.toUTCString();
+     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+     console.log("getCookie()", cname);
+     var name = cname + "=";
+     var ca = document.cookie.split(";");
+     for (var i = 0; i < ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0) == " ") {
+               c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+               return c.substring(name.length, c.length);
+          }
+     }
+     return "";
+}
 
 simpleSearch = function() {
     // Declare variables
@@ -1736,9 +1762,9 @@ createTableFromData = function (data) {
 // 	return isHe;
 // }
 
-updateLang = function (specifyLang) {
+function updateLang(specifyLang) {
 	// console.log('updateLang()', specifyLang );
-	if (!specifyLang){	
+	if (!specifyLang){
 		/* Set specific language if provided */
 		$('html').attr('lang', function(index, attr){
 			return attr == 'en' ? 'he' : 'en';
@@ -1753,6 +1779,9 @@ updateLang = function (specifyLang) {
 	}
 	var currentLang = $('html').attr('lang');
 	var previousLang = currentLang == 'en' ? 'he' : 'en';
+     /* Set Cookie for next time... */
+     setCookie('lang',currentLang);
+
 	/* In general, we are not swapping content.  All content is added to DOM.  Simply showing and hiding based the selected lang */
 	$('.'+currentLang).show();
 	$('.'+previousLang).hide();
@@ -1775,9 +1804,9 @@ updateLang = function (specifyLang) {
 			// if($(this).parent().css('direction') == 'ltr')
 			$(this).attr('style', 'float:right !important;text-align:right !important;');
 			// $(this).attr('style', 'float:right !important');
-		});		
+		});
 	}
-};
+}
 
 
 // $(window).on('beforeunload', function() {
@@ -1802,20 +1831,16 @@ $( document ).ready(function() {
      var queryVars = Object.fromEntries([...new URLSearchParams(location.search)]);
      console.log("queryVars:", queryVars);
 
+     /* Set language on load */
+     /* lang value taken in the following order: URL > Cookie > Default    */
      if (["en", "he"].includes(queryVars.lang)) {
           updateLang(queryVars.lang);
+     } else if ( ["en", "he"].includes(getCookie("lang")) ) {
+          updateLang(getCookie("lang"));
      } else if (!$("html").attr("lang")) {
           updateLang("he");
      }
 
-     /* Handle any ?goto= parameters on incoming URL */
-
-     // if (!!queryVars.goto) {
-     //      console.log("queryVars.goto found!", queryVars.goto);
-     //      $('[data-target="#' + queryVars.goto + '"]').trigger("click");
-     // } else {
-     //      console.log("queryVars.goto NOT found!", queryVars);
-     // }
 
      /* EVENT HANDLERS */
 
