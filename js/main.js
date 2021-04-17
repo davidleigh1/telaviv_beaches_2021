@@ -1340,7 +1340,7 @@ function stringToBooleanOrBoolean(string) {
 }
 
 function setCookie(cname, cvalue, exdays) {
-     console.log("setCookie()", cname, cvalue, exdays);
+     // console.log("setCookie()", cname, cvalue, exdays);
      var d = new Date();
      d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
      var expires = "expires=" + d.toUTCString();
@@ -1348,7 +1348,7 @@ function setCookie(cname, cvalue, exdays) {
 }
 
 function getCookie(cname) {
-     console.log("getCookie()", cname);
+     // console.log("getCookie()", cname);
      var name = cname + "=";
      var ca = document.cookie.split(";");
      for (var i = 0; i < ca.length; i++) {
@@ -1765,7 +1765,7 @@ createTableFromData = function (data) {
 			'</div>';
 			tableHtml += currentRowHtml;
 	}
-     console.log("Returning tableHtml");
+     // console.log("Returning tableHtml");
 	return tableHtml;
 }
 
@@ -1832,24 +1832,24 @@ function updateLang(specifyLang) {
 // }
 
 function showFilterbar(showBool) {
-     console.log("showFilterbar(", showBool, "typeof:", typeof showBool, ") isVisible before:", $(".filterbar").is(":visible"));
+     // console.log("showFilterbar(", showBool, "typeof:", typeof showBool, ") isVisible before:", $(".filterbar").is(":visible"));
      if (showBool === true) {
           $(".filterbar").show("fast", function () {
-               console.log("showFilterbar() isVisible after:", $(".filterbar").is(":visible"));
+               // console.log("showFilterbar() isVisible after:", $(".filterbar").is(":visible"));
                setCookie("show_filter", showBool);
           });
           window.scroll(0, 0);
           return;
      } else if (showBool === false) {
           $(".filterbar").hide("fast", function () {
-               console.log("showFilterbar() isVisible after:", $(".filterbar").is(":visible"));
+               // console.log("showFilterbar() isVisible after:", $(".filterbar").is(":visible"));
                setCookie("show_filter", showBool);
           });
           // window.scroll(0, 0);
           return;
      } else {
           $(".filterbar").toggle("fast", function () {
-               console.log("showFilterbar() isVisible after:", $(".filterbar").is(":visible"));
+               // console.log("showFilterbar() isVisible after:", $(".filterbar").is(":visible"));
                setCookie("show_filter", $(".filterbar").is(":visible"));
           });
           window.scroll(0, 0);
@@ -1862,7 +1862,7 @@ function showFilterbar(showBool) {
 // });
 
 $( document ).ready(function() {
-     console.log('ONREADY');
+     // console.log('ONREADY');
 
      tlv_vars.isMobile = isMobile();
 
@@ -1876,7 +1876,7 @@ $( document ).ready(function() {
      /* Simulate effect of click to hide the non-selected language */
 
      var queryVars = Object.fromEntries([...new URLSearchParams(location.search)]);
-     console.log("queryVars:", queryVars);
+     // console.log("queryVars:", queryVars);
 
      /* Set language on load */
      /* lang value taken in the following order: URL > Cookie > Default    */
@@ -1961,22 +1961,22 @@ $( document ).ready(function() {
      /* Handle any ?goto= parameters on incoming URL */
 
      if (!!queryVars.goto) {
-          console.log("queryVars.goto found!", queryVars.goto);
+          // console.log("queryVars.goto found!", queryVars.goto);
           $('[data-target="#' + queryVars.goto + '"]').trigger("click");
      } else {
-          console.log("queryVars.goto NOT found!", queryVars);
+          // console.log("queryVars.goto NOT found!", queryVars);
      }
 
      /* Show/hide filter on load */
 
      /* show_filter value taken in the following order: URL > Cookie > Default */
      if (["true", "false"].includes(queryVars.show_filter)) {
-          console.log("queryVars.show_filter found!", queryVars.show_filter);
+          // console.log("queryVars.show_filter found!", queryVars.show_filter);
           showFilterbar(stringToBooleanOrBoolean(queryVars.show_filter));
      } else if ([true, false].includes(getCookie("show_filter"))) {
           showFilterbar(getCookie("show_filter"));
      } else {
-          console.log("URL 'queryVars.show_filter' NOT found and no 'show_filter' cookie was found!");
+          // console.log("URL 'queryVars.show_filter' NOT found and no 'show_filter' cookie was found!");
      }
 });
 
