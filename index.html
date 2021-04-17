@@ -103,7 +103,10 @@
 
 
           <div class="searchbar" id="search">
-               <input type="text" id="searchfield" class="form-control" onkeyup="simpleSearch()" autofocus="autofocus">
+               <!-- <form> -->
+               <input type="search" id="searchfield" class="form-control searchfield pull-left" onkeyup="simpleSearch()" autofocus="autofocus">
+               <button type="reset" class="search-reset pull-right"><span class="en">Clear</span><span class="he">מחק</span></button>
+               <!-- </form> -->
 		</div>
 
 
@@ -211,10 +214,10 @@
                                    </li>
                               </ul>
                          <li>
-                              How to use
+                              How to use:
                               <ul>
                                    <li>
-                                        Your choice of interface language, and show/hide Filter and Search Interfaces settings will be stored automatically.  Click to hide any fields you do not wish to see/use.
+                                        Your choice of interface language, and show/hide Filter <strike>and Search</strike> Interfaces settings will be stored automatically.  Click to hide any fields you do not wish to see/use.
                                    </li>
                                    <li>
                                         Currently, specific Filter settings are not retained and will default to show all beaches on reload.
@@ -226,21 +229,27 @@
                          </li>
 
                          <li>
-                              Search:
+                              Searching:
                               <ul>
                                    <li>
-                                   Type <code>#</code> and hut number (e.g. <code>#12</code>) to search for a lifeguard hut
+                                        Clicking the 🔍 (magnifying glass) search icon will bring you directly to the search field and open your mobile keyboard ready to type.  If you don't see the search field at the top of the page, just swipe down a little with your finger to expose it.
+                                   </li>
+                                   <li>
+                                        The list of beaches will filter automatically as you type into the search field.
+                                   </li>
+                                   <li>
+                                        Type <code>#</code> and hut number (e.g. <code>#12</code>) to search for a lifeguard hut
                                    </li>
                               </ul>
                          </li>
                          <li>
-                              Advanced - Accepted query parameters are listed below.<br>
+                              Advanced - Accepted query parameters are listed below:<br>
                               Note: Settings passed this way in URL will override and update any cookie settings.
                               <ul>
                                    <li><code>lang=</code> with values: <code>en</code> or <code>he</code></li>
                                    <li><code>goto=</code> with ID of info panel e.g. <code>info_panel_7</code>. This is most easily found by clicking the 'Share' button.</li>
                                    <li><code>show_filter=</code> with values: <code>true</code> or <code>false</code>.</li>
-                                   <li><code>show_search=</code> with values: <code>true</code> or <code>false</code>. When opening with <code>show_search=true</code>, the keyboard cursor should be focussed in search field.</li>
+                                   <!-- <li><code>show_search=</code> with values: <code>true</code> or <code>false</code>. When opening with <code>show_search=true</code>, the keyboard cursor should be focussed in search field.</li> -->
                               </ul>
                          </li>
                     </ul>
@@ -249,8 +258,8 @@
 
 		<footer>
 			<div class="container-fluid">
-				<div class="row en">Credit &amp; Thanks to <b>Lior Fadida</b>, Ichud Hatzalah, Tirat HaCarmel</div>
-				<div class="row en">© David Leigh, United Hatzalah Dan/Central District 2017-2021</div>
+				<div class="row en">Credit &amp; thanks to <b>Lior Fadida</b>, Ichud Hatzalah, Tirat HaCarmel for the original idea</div>
+				<div class="row en">© <b>David Leigh</b>, United Hatzalah Dan/Central District 2017-2021</div>
 				<!-- <div class="row en">Other Places: <a href="http://www.liorfadida.host-ed.me/beaches.html" target="_blank">Haifa Beaches</a> | <a href="http://www.liorfadida.host-ed.me/technion.html" target="_blank">Technion, Haifa</a></div> -->
 				<div class="row en">Sources: <a href="https://gisn.tel-aviv.gov.il/iview2js/index.aspx" target="_blank">GISN TLV</a> | <a href="http://www.mapcoordinates.net/en" target="_blank">mapcoordinates.net</a> </div>
 				<div class="row he">קרדיט &amp; תודות ל-<b>ליאור פדידה</b> ,איחוד הצלה, סניף חיפה</div>

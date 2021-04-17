@@ -1765,7 +1765,7 @@ createTableFromData = function (data) {
 			'</div>';
 			tableHtml += currentRowHtml;
 	}
-
+     console.log("Returning tableHtml");
 	return tableHtml;
 }
 
@@ -1807,16 +1807,17 @@ function updateLang(specifyLang) {
 	/* Reverse pull left and pull right */
 	if ( $('html').attr('dir') == 'rtl') {
 		$('.pull-right').each(function() {
-			// if( $(this).parent().css('direction') == 'rtl' ) {
 				$(this).attr('style', 'float:left !important;text-align:left !important;');
-				// $(this).attr('style', 'text-align:left !important');
-			// }
+		});
+		$('.pull-left').each(function() {
+				$(this).attr("style", "float:right !important;text-align:right !important;");
 		});
 	} else {
 		$('.pull-right').each(function() {
-			// if($(this).parent().css('direction') == 'ltr')
 			$(this).attr('style', 'float:right !important;text-align:right !important;');
-			// $(this).attr('style', 'float:right !important');
+		});
+		$('.pull-left').each(function() {
+			$(this).attr("style", "float:left !important;text-align:left !important;");
 		});
 	}
 }
@@ -1861,7 +1862,7 @@ function showFilterbar(showBool) {
 // });
 
 $( document ).ready(function() {
-     // console.log('ready');
+     console.log('ONREADY');
 
      tlv_vars.isMobile = isMobile();
 
@@ -1911,16 +1912,16 @@ $( document ).ready(function() {
           $("#searchfield").focus();
      });
 
-     /* filterButtonMenu (show/hide the filterbar containing filter-toggles) */
-     // $("button.filterButtonMenu").click(function (e) {
-     //      e.stopPropagation();
-     //      $(".filterbar").toggle("fast", function () {});
-     //      window.scroll(0, 0);
-     // });
+     /* Search Field Clear/Reset Button */
+     $(".search-reset").click(function (e) {
+          e.stopPropagation();
+          $("#searchfield").val("");         // Clear the input field
+          simpleSearch();                    // Reset the search that were based in the cleared value
+          $("#searchfield").focus();         // Restore the focus on the search field
+     });
+
      $("button.filterButton").click(function (e) {
           e.stopPropagation();
-          // $(".filterbar").toggle("fast", function () {});
-          // window.scroll(0, 0);
           showFilterbar();
      });
      $(".filter-toggle").click(function (e) {
@@ -1958,6 +1959,7 @@ $( document ).ready(function() {
      });
 
      /* Handle any ?goto= parameters on incoming URL */
+
      if (!!queryVars.goto) {
           console.log("queryVars.goto found!", queryVars.goto);
           $('[data-target="#' + queryVars.goto + '"]').trigger("click");
@@ -1966,6 +1968,7 @@ $( document ).ready(function() {
      }
 
      /* Show/hide filter on load */
+
      /* show_filter value taken in the following order: URL > Cookie > Default */
      if (["true", "false"].includes(queryVars.show_filter)) {
           console.log("queryVars.show_filter found!", queryVars.show_filter);
@@ -1975,13 +1978,17 @@ $( document ).ready(function() {
      } else {
           console.log("URL 'queryVars.show_filter' NOT found and no 'show_filter' cookie was found!");
      }
-
-     /* Handle any ?show_filter= parameters on incoming URL */
-     // if (!!queryVars.show_filter && ["true", "false"].includes(queryVars.show_filter)) {
-     //      console.log("queryVars.show_filter found!", queryVars.show_filter);
-     //      // $('[data-target="#' + queryVars.goto + '"]').trigger("click");
-     //      showFilterbar(stringToBooleanOrBoolean(queryVars.show_filter));
-     // } else {
-     //      console.log("queryVars.show_filter NOT found!", queryVars);
-     // }
 });
+
+// function loadingDone() {
+//      console.log("ONLOAD!");
+//           setTimeout(
+//                (function countdown() {
+//                     console.log("now!");
+//                     $(".searchButton").trigger("click");
+//                }),
+//                1000
+//           );
+//           // $(".searchButton").trigger("click");
+// }
+// window.onload = loadingDone;
