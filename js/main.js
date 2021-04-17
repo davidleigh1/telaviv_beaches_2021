@@ -77,7 +77,8 @@ tlv_data = [
 	"car_access": false,
 	// "on_foot_only": true,
 	// "parking": [],
-	"pre_nav_msg": "Motorcycles only - Enter HaTzuk North/Mandarin Beach and turn right (north) until the end of the paved tayelet. Cars/Motorcycles - Drive north through the parking and continue along the cliff until the end of the fence (on your left). You can then (carefully!) go down the cliffs to the sea shore."
+	"pre_nav_msg": "Motorcycles only - Enter HaTzuk North/Mandarin Beach and turn right (north) until the end of the paved tayelet. Cars/Motorcycles - Drive north through the parking and continue along the cliff until the end of the fence (on your left). You can then (carefully!) go down the cliffs to the sea shore.",
+     "type": "landmark"
 },{
 	"he":{
 		"name": "הצוק (צפון - מנדרין)",
@@ -1421,19 +1422,6 @@ function logError(message) {
      logText(message, true);
 }
 
-// function setShareButtonsEnabled(enabled) {
-//      document.querySelector("#share").disabled = !enabled;
-//      document.querySelector("#share-no-gesture").disabled = !enabled;
-// }
-
-// function checkboxChanged(e) {
-//      const checkbox = e.target;
-//      const textfield = document.querySelector("#" + checkbox.id.split("_")[0]);
-
-//      textfield.disabled = !checkbox.checked;
-//      if (!checkbox.checked) textfield.value = "";
-// }
-
 async function testWebShare(gotoAnchor,name) {
      const title_input = "Share a Tel Aviv Beach Location";
      const text_input = "*" + name + "*";
@@ -1443,26 +1431,15 @@ async function testWebShare(gotoAnchor,name) {
      const text = text_input.value;
      const url = url_input.value;
 
-     // if (files && files.length > 0) {
-     //      if (!navigator.canShare) {
-     //           logError("Error: Unsupported feature: navigator.canShare()");
-     //           // setShareButtonsEnabled(true);
-     //           return;
-     //      }
-     // }
-
-     // setShareButtonsEnabled(false);
      try {
           await navigator.share({ title:title_input, text:text_input, url:url_input });
           // alert("Successfully sent share");
      } catch (error) {
           alert("Error sharing: " + error);
      }
-     // setShareButtonsEnabled(true);
 }
 
 async function testWebShareDelay() {
-     // setShareButtonsEnabled(false);
      await sleep(6000);
      testWebShare();
 }
@@ -1477,7 +1454,6 @@ function onLoad() {
      // document.querySelector("#share-no-gesture").addEventListener("click", testWebShareDelay);
 
      if (navigator.share === undefined) {
-          setShareButtonsEnabled(false);
           if (window.location.protocol === "http:") {
                // navigator.share() is only available in secure contexts.
                window.location.replace(window.location.href.replace(/^http:/, "https:"));

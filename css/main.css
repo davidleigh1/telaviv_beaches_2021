@@ -248,27 +248,39 @@ button.filter-toggle.btn-custom.active {
 	/*float: right;*/
 }
 
+button.filter-toggle.btn-custom.park.active,
 div.place-line.park {
 	background-color: hsla(120, 100%, 25%, 0.2);
 }
 
+button.filter-toggle.btn-custom.beach_official.active,
 div.place-line.beach_official {
-	/*background-color: #6d6dff;*/
-	/*background-color: #b5b5ff;*/
 	background-color: #03A9F4;
 }
 
+button.filter-toggle.btn-custom.beach_unofficial.active,
 div.place-line.beach_unofficial {
-	/*background-color: #009688;*/
 	background-color: #abcdef;
 }
 
+button.filter-toggle.btn-custom.restaurant.active,
 div.place-line.restaurant {
 	background-color: hsla(36, 100%, 50%, 0.21);
 }
 
+button.filter-toggle.btn-custom.landmark.active,
 div.place-line.landmark {
 	background-color: hsl(0, 0%, 82%);
+}
+
+button.filter-toggle.btn-custom.beach_unofficial_port.active,
+div.place-line.beach_unofficial_port {
+	background-color: #7800005e;
+}
+
+button.filter-toggle.btn-custom.beach_unofficial_dogs.active,
+div.place-line.beach_unofficial_dogs {
+	background-color: #e3f2fd;
 }
 
 .route-icon {
