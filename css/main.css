@@ -123,24 +123,34 @@ button.toggleLang, button.filterButtonMenu {
 	width: 42px;
 }
 
+button.openForm {
+     background-color: #ff7200;
+     color: #fff;
+     border-color: transparent;
+}
+
 /* SEARCHBAR */
 
 .searchbar {
+     display: flex;
 	height: 60px;
 	padding: 15px 15px 5px 15px;
 }
 
 input.searchfield {
-     display: inline-block;
-     width: 85%;
+     flex-grow: 2;
+     display: inline-flex;
+     /* width: 85%; */
      padding: 6px;
 }
 
 button.search-reset {
-     display: inline-block;
+     flex-grow: 1;
+     display: inline-flex;
      /* width: 9%; */
      height: 34px;
-     /* padding: 6px 12px; */
+     padding: 6px 12px;
+     margin: 0 5px;
      font-size: 14px;
      line-height: 1.42857143;
      /*     background-color: #555; */

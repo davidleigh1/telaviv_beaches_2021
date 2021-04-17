@@ -1742,10 +1742,10 @@ createTableFromData = function (data) {
                /* SHARE LINE  */
                '<div class="share-info-row row row-eq-height place-row">' +
                     '<button class="place-share-button en" data-place="info_panel_'+i+'" onclick="testWebShare(\'info_panel_' + i + '\',\'' + en_name + '\')">'+
-                         '<i class="fa fa-fw fa-share-alt"></i> Click here to share' +
+                         '<i class="fa fa-fw fa-share-alt"></i> Share' +
                     '</button>' +
                     '<div class="place-share-button he" data-place="info_panel_'+i+'" onclick="testWebShare(\'info_panel_' + i + '\',\'' + he_name + '\')">'+
-                         'לחצו כאן לשיתוף <i class="fa fa-fw fa-share-alt-square"></i>' +
+                         '<i class="fa fa-fw fa-share-alt"></i> שיתוף' +
                     '</div>' +
                '</div>' +
 
@@ -1890,10 +1890,10 @@ $( document ).ready(function() {
 
      /* EVENT HANDLERS */
 
-     /* Open Wiki */
-     // $( ".openWiki" ).click(function(e) {
-     // 	window.open("http://ems.1221tlv.org/", "_blank");
-     // });
+     /* Open Report Forms */
+     $(".openForm").click(function (e) {
+          window.open("https://motid-1221.formtitan.com/Medical_journal#/", "_blank");
+     });
 
      /* Change Language */
      $(".toggleLang").click(function (e) {
