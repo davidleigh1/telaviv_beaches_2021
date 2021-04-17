@@ -147,6 +147,10 @@ button.toggleLang, button.filterButtonMenu {
 	margin-left: 5px;
 }
 
+.filter-text-label {
+     font-size: smaller;
+}
+
 /* TOGGLES */
 
 .filter-toggle.btn-default:active,

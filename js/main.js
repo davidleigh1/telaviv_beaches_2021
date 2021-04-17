@@ -1326,6 +1326,19 @@ tlv_data = [
 // var cookie_name = "i18n_lang";
 // var default_lang = "en";
 
+function stringToBooleanOrBoolean(string) {
+     switch (string.toLowerCase()) {
+          case "false":
+          case "no":
+               return false;
+          case "true":
+          case "yes":
+               return true;
+          default:
+               return string;
+     }
+}
+
 function setCookie(cname, cvalue, exdays) {
      console.log("setCookie()", cname, cvalue, exdays);
      var d = new Date();
@@ -1344,7 +1357,7 @@ function getCookie(cname) {
                c = c.substring(1);
           }
           if (c.indexOf(name) == 0) {
-               return c.substring(name.length, c.length);
+               return stringToBooleanOrBoolean(c.substring(name.length, c.length));
           }
      }
      return "";
@@ -1808,6 +1821,39 @@ function updateLang(specifyLang) {
 	}
 }
 
+// function showFilterbarBool(showBool) {
+//      console.log("showFilterbar() isVisible before:", $(".filterbar").is(":visible"));
+//      $(".filterbar").toggle("fast", function () {
+//           console.log("showFilterbar() isVisible after:", $(".filterbar").is(":visible"));
+//           setCookie("show_filter", $(".filterbar").is(":visible"));
+//      });
+//      window.scroll(0, 0);
+// }
+
+function showFilterbar(showBool) {
+     console.log("showFilterbar(", showBool, "typeof:", typeof showBool, ") isVisible before:", $(".filterbar").is(":visible"));
+     if (showBool === true) {
+          $(".filterbar").show("fast", function () {
+               console.log("showFilterbar() isVisible after:", $(".filterbar").is(":visible"));
+               setCookie("show_filter", showBool);
+          });
+          window.scroll(0, 0);
+          return;
+     } else if (showBool === false) {
+          $(".filterbar").hide("fast", function () {
+               console.log("showFilterbar() isVisible after:", $(".filterbar").is(":visible"));
+               setCookie("show_filter", showBool);
+          });
+          // window.scroll(0, 0);
+          return;
+     } else {
+          $(".filterbar").toggle("fast", function () {
+               console.log("showFilterbar() isVisible after:", $(".filterbar").is(":visible"));
+               setCookie("show_filter", $(".filterbar").is(":visible"));
+          });
+          window.scroll(0, 0);
+     }
+}
 
 // $(window).on('beforeunload', function() {
 // 	console.log('beforeunload');
@@ -1835,12 +1881,11 @@ $( document ).ready(function() {
      /* lang value taken in the following order: URL > Cookie > Default    */
      if (["en", "he"].includes(queryVars.lang)) {
           updateLang(queryVars.lang);
-     } else if ( ["en", "he"].includes(getCookie("lang")) ) {
+     } else if (["en", "he"].includes(getCookie("lang"))) {
           updateLang(getCookie("lang"));
      } else if (!$("html").attr("lang")) {
           updateLang("he");
      }
-
 
      /* EVENT HANDLERS */
 
@@ -1867,15 +1912,16 @@ $( document ).ready(function() {
      });
 
      /* filterButtonMenu (show/hide the filterbar containing filter-toggles) */
-     $("button.filterButtonMenu").click(function (e) {
-          e.stopPropagation();
-          $(".filterbar").toggle("fast", function () {});
-          window.scroll(0, 0);
-     });
+     // $("button.filterButtonMenu").click(function (e) {
+     //      e.stopPropagation();
+     //      $(".filterbar").toggle("fast", function () {});
+     //      window.scroll(0, 0);
+     // });
      $("button.filterButton").click(function (e) {
           e.stopPropagation();
-          $(".filterbar").toggle("fast", function () {});
-          window.scroll(0, 0);
+          // $(".filterbar").toggle("fast", function () {});
+          // window.scroll(0, 0);
+          showFilterbar();
      });
      $(".filter-toggle").click(function (e) {
           clickEvent = e;
@@ -1912,11 +1958,30 @@ $( document ).ready(function() {
      });
 
      /* Handle any ?goto= parameters on incoming URL */
-
      if (!!queryVars.goto) {
           console.log("queryVars.goto found!", queryVars.goto);
           $('[data-target="#' + queryVars.goto + '"]').trigger("click");
      } else {
           console.log("queryVars.goto NOT found!", queryVars);
      }
+
+     /* Show/hide filter on load */
+     /* show_filter value taken in the following order: URL > Cookie > Default */
+     if (["true", "false"].includes(queryVars.show_filter)) {
+          console.log("queryVars.show_filter found!", queryVars.show_filter);
+          showFilterbar(stringToBooleanOrBoolean(queryVars.show_filter));
+     } else if ([true, false].includes(getCookie("show_filter"))) {
+          showFilterbar(getCookie("show_filter"));
+     } else {
+          console.log("URL 'queryVars.show_filter' NOT found and no 'show_filter' cookie was found!");
+     }
+
+     /* Handle any ?show_filter= parameters on incoming URL */
+     // if (!!queryVars.show_filter && ["true", "false"].includes(queryVars.show_filter)) {
+     //      console.log("queryVars.show_filter found!", queryVars.show_filter);
+     //      // $('[data-target="#' + queryVars.goto + '"]').trigger("click");
+     //      showFilterbar(stringToBooleanOrBoolean(queryVars.show_filter));
+     // } else {
+     //      console.log("queryVars.show_filter NOT found!", queryVars);
+     // }
 });
