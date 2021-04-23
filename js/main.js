@@ -164,7 +164,7 @@ tlv_data = [
 	"approx_address": "HaTzuk HaDromi 3, Tel Aviv",
 	"restaurants": [],
 	"hotels": [],
-	"notes_access": "Three accesses: <b>North End: </b> By foot, head south from 'HaTzuk South / Sea & Sun'.  <b>Central: </b>  By foot, descend from the road to the military base 150m south of Paz Lamed Petrol Station on Road 2040. <b>South End: </b> By foot, head north from the 'Tel Baruch' car park.",
+	"notes_access": "Three accesses:<br/><b>North End: </b> By foot, head south down the beach from 'HaTzuk South / Sea & Sun'.<br/><b>Central: </b>  By foot, descend from the road to the military base 150m south of Paz Lamed Petrol Station on Road 2040. <br/><b>South End: </b> By foot or 4x4, head north up the beach from the 'Tel Baruch' car park.",
 	"landmarks": ["Paz Lamed Petrol Station","Army base"],
 	"has_lifeguard": false,
 	"is_official": false,
@@ -473,7 +473,7 @@ tlv_data = [
 		"landmarks": ["החוף הנפרד"],
 		"pre_nav_msg": "גישה דרך חוף מציצים (מכיוון צפון)"
 	},
-	"name": "Religious / Nordau",
+	"name": "Religious Separate (Nordau)",
 	"lat": "32.09309378",
 	"lon": "34.77127656",
 	"aka": "Separated Separate Segregated Religious Beach",
@@ -481,7 +481,7 @@ tlv_data = [
 	"overall_order": "14",
 	"cross_streets": ["Nordau"],
 	"close_streets": ["2397", "HaYarkon"],
-	"approx_address": "",
+	"approx_address": "Listed by TLV Muni: 'שרתון דתיים (נפרד) 14'",
 	"restaurants": [],
 	"hotels": [],
 	"notes_access": "Vehicle access via Metzitzim (from North)",
@@ -1892,7 +1892,7 @@ $( document ).ready(function() {
 
      /* Open Report Forms */
      $(".openForm").click(function (e) {
-          window.open("https://motid-1221.formtitan.com/Medical_journal#/", "_blank");
+          window.open("https://motid-1221.formtitan.com/Medical_journal#/", "_blank", "location=0");
      });
 
      /* Change Language */
