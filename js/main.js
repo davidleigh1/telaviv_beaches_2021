@@ -1422,30 +1422,30 @@ navigateTo = function (lat, lon, getIcon) {
     }
 };
 
-function share(shareThis) {
-     // alert("Share This: " + shareThis);
-     /* https://web.dev/web-share/ */
-     var shareUrl = "https://tlv.works/telaviv_beaches/?goto="+shareThis;
-     if (navigator.share) {
-          navigator
-               .share({
-                    title: "Sharing Title",
-                    text: "Check out this thing!",
-                    url: shareUrl,
-               })
-               .then(() => alert("Successful share"))
-               .catch((error) => alert("Error sharing", error));
-     } else {
-          alert("No sharing!", navigator.canShare );
-     }
-}
+// function share(shareThis) {
+//      // alert("Share This: " + shareThis);
+//      /* https://web.dev/web-share/ */
+//      var shareUrl = "https://tlv.works/telaviv_beaches/?goto="+shareThis;
+//      if (navigator.share) {
+//           navigator
+//                .share({
+//                     title: "Sharing Title",
+//                     text: "Check out this thing!",
+//                     url: shareUrl,
+//                })
+//                .then(() => alert("Successful share"))
+//                .catch((error) => alert("Error sharing", error));
+//      } else {
+//           alert("No sharing!", navigator.canShare );
+//      }
+// }
 
 /* ------------------------------ */
-function sleep(delay) {
-     return new Promise((resolve) => {
-          setTimeout(resolve, delay);
-     });
-}
+// function sleep(delay) {
+//      return new Promise((resolve) => {
+//           setTimeout(resolve, delay);
+//      });
+// }
 
 function logText(message, isError) {
      if (isError) console.error(message);
@@ -1461,27 +1461,47 @@ function logError(message) {
      logText(message, true);
 }
 
-async function testWebShare(gotoAnchor,name) {
-     const title_input = "Share a Tel Aviv Beach Location";
-     const text_input = "*" + name + "*";
+async function shareToWeb(gotoAnchor,name,lat,lng) {
+
+     // console.log(gotoAnchor);
+     // console.log(name);
+
+     const title_input = "Share '" + decodeURI(name) +"'";
+     const text_input = "*" + name + "* at%0alat:" + lat + " / lng:" + lng ;
      const url_input = "https://tlv.works/telaviv_beaches/?goto="+gotoAnchor;
 
-     const title = title_input.value;
-     const text = text_input.value;
-     const url = url_input.value;
+     // const title = title_input.value;
+     // const text = text_input.value;
+     // const url = url_input.value;
 
-     try {
-          await navigator.share({ title:title_input, text:text_input, url:url_input });
-          // alert("Successfully sent share");
-     } catch (error) {
-          alert("Error sharing: " + error);
-     }
+     const shareObject = {
+          'title': title_input,
+          'text': text_input,
+          'url': url_input
+     };
+
+     console.log(shareObject);
+
+     // try {
+     //      // await navigator.share(shareObject);
+     //      await navigator.share({ 'title':title_input, 'text':text_input, 'url':url_input });
+     //      // alert("Successfully sent share");
+     // } catch (error) {
+     //      alert("Error sharing: " + error);
+     // }
+
+     navigator
+          .share(shareObject)
+          .then(() => {
+               console.log("Thank you for sharing!", shareObject);
+          })
+          .catch(console.error);
 }
 
-async function testWebShareDelay() {
-     await sleep(6000);
-     testWebShare();
-}
+// async function shareToWebDelay() {
+//      await sleep(6000);
+//      shareToWeb();
+// }
 
 function onLoad() {
      // // Checkboxes disable and delete textfields.
@@ -1489,8 +1509,8 @@ function onLoad() {
      // document.querySelector("#text_checkbox").addEventListener("click", checkboxChanged);
      // document.querySelector("#url_checkbox").addEventListener("click", checkboxChanged);
 
-     // document.querySelector("#share").addEventListener("click", testWebShare);
-     // document.querySelector("#share-no-gesture").addEventListener("click", testWebShareDelay);
+     // document.querySelector(".place-share-button").addEventListener("click", alert(this));
+     // document.querySelector("#share-no-gesture").addEventListener("click", shareToWebDelay);
 
      if (navigator.share === undefined) {
           if (window.location.protocol === "http:") {
@@ -1741,12 +1761,8 @@ createTableFromData = function (data) {
 			'</div>' +
                /* SHARE LINE  */
                '<div class="share-info-row row row-eq-height place-row">' +
-                    '<button class="place-share-button en" data-place="info_panel_'+i+'" onclick="testWebShare(\'info_panel_' + i + '\',\'' + en_name + '\')">'+
-                         '<i class="fa fa-fw fa-share-alt"></i> Share' +
-                    '</button>' +
-                    '<div class="place-share-button he" data-place="info_panel_'+i+'" onclick="testWebShare(\'info_panel_' + i + '\',\'' + he_name + '\')">'+
-                         '<i class="fa fa-fw fa-share-alt"></i> שיתוף' +
-                    '</div>' +
+                    '<button class="place-share-button en"  data-place="info_panel_'+i+'"  onclick="shareToWeb(\'info_panel_' + i + '\', \'' + encodeURI(en_name) + '\', \''+ data[i].lat  +'\', \''+ data[i].lon  +'\'                )">'+'<i class="fa fa-fw fa-share-alt"></i> Share' + '</button>' +
+                    '<button class="place-share-button he"  data-place="info_panel_'+i+'"  onclick="shareToWeb(\'info_panel_' + i + '\', \'' + encodeURI(he_name) + '\', \'' + encodeURI(he_name) + '\', \'' + encodeURI(he_name) + '\')">'+'<i class="fa fa-fw fa-share-alt"></i> שיתוף' + '</button>' +
                '</div>' +
 
 		'</div>';
