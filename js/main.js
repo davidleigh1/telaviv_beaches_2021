@@ -738,7 +738,7 @@ tlv_data = [
                close_streets: ["הרבט סמואל", "טיילת שלמה להט"],
                approx_address: "הרברט סמואל 111, תל אביב",
                restaurants: ["לה לה לנד", "קפה לונדון"],
-               hotels: ["קראון פלאזה", "רנסנס", "שרתון"],
+               hotels: ["קראון פלאזה", "רניסנס/רנסנס", "שרתון", "לאונרדו"],
                notes_access:
                     "כניסה מכיוון צפון: כניסה לאופנועים דרך הרמפה לכיוון הטיילת מחוץ למלון רנסנס; כניסה מכיוון דרום: פנית פרסה ברח' הירקון ליד מלון שרתון, יש לעצור בכניסה לטיילת / חניון, מול שגרירות צרפת, ליד קפה לונדון",
                landmarks: ["סריכת גורדון", "שגרירות צרפת"],
@@ -1134,11 +1134,11 @@ tlv_data = [
      },
      {
           he: {
-               name: "גן צ'רלס קלור (דרום)",
-               aka: "גן צ'ארלס קלור דרום",
+               name: "גן צ'\רלס קלור (דרום)",
+               aka: "גן צ'\ארלס קלור דרום",
                cross_streets: ["נחום גולדמן"],
                close_streets: ["נחום גולדמן"],
-               approx_address: "גן צ'רלס קלור, נחום גולמן 2, תל אביב",
+               approx_address: "גן צ'\רלס קלור, נחום גולמן 2, תל אביב",
                landmarks: ["גשר הולכי רגל כחול"],
                notes_access: "מגשר הולכי הרגל הכחול בדרום",
                parking: ["דולפינריום"],
@@ -1549,7 +1549,8 @@ function logError(message) {
 
 async function shareToWeb(gotoAnchor,name,lat,lon) {
 
-     // console.log(gotoAnchor);
+     // console.log('shareToWeb');
+     // console.log(gotoAnchor, name, lat, lon);
      // console.log(name);
 
      // const waze_url = "waze://?ll=" + decodeURI(lat) + "," + decodeURI(lon) + "&navigate=yes";
@@ -1592,24 +1593,33 @@ async function shareToWeb(gotoAnchor,name,lat,lon) {
 //      shareToWeb();
 // }
 
-function onLoad() {
-     // // Checkboxes disable and delete textfields.
-     // document.querySelector("#title_checkbox").addEventListener("click", checkboxChanged);
-     // document.querySelector("#text_checkbox").addEventListener("click", checkboxChanged);
-     // document.querySelector("#url_checkbox").addEventListener("click", checkboxChanged);
 
-     // document.querySelector(".place-share-button").addEventListener("click", alert(this));
-     // document.querySelector("#share-no-gesture").addEventListener("click", shareToWebDelay);
+// function clicked(params) {
+//      console.log("Clicked!", $(params));
+// }
+// function onLoad() {
+//      // // Checkboxes disable and delete textfields.
+//      // document.querySelector("#title_checkbox").addEventListener("click", checkboxChanged);
+//      // document.querySelector("#text_checkbox").addEventListener("click", checkboxChanged);
+//      // document.querySelector("#url_checkbox").addEventListener("click", checkboxChanged);
 
-     if (navigator.share === undefined) {
-          if (window.location.protocol === "http:") {
-               // navigator.share() is only available in secure contexts.
-               window.location.replace(window.location.href.replace(/^http:/, "https:"));
-          } else {
-               logError("Error: You need to use a browser that supports this draft " + "proposal.");
-          }
-     }
-}
+//      // document.querySelector(".place-share-button").addEventListener("click", clicked);
+//      // document.querySelector("#share-no-gesture").addEventListener("click", shareToWebDelay);
+//      // $(".place-share-button").on("click", function (event) {
+//      //      event.stopPropagation();
+//      //      event.stopImmediatePropagation();
+//      //      //(... rest of your JS code)
+//      //      clicked();
+//      // });
+//      if (navigator.share === undefined) {
+//           if (window.location.protocol === "http:") {
+//                // navigator.share() is only available in secure contexts.
+//                window.location.replace(window.location.href.replace(/^http:/, "https:"));
+//           } else {
+//                logError("Error: You need to use a browser that supports this draft " + "proposal.");
+//           }
+//      }
+// }
 /* ------------------------------ */
 
 
@@ -1677,7 +1687,7 @@ buildBoolean = function (placeAttribute, iconHTML) {
 };
 
 function buildAddressLink(thisPlaceObj, placeAttribute, lang = "en", iconHTML, URL) {
-	console.log('createTableFromData.buildAddressLink()', thisPlaceObj, placeAttribute, lang, URL);
+	// console.log('createTableFromData.buildAddressLink()', thisPlaceObj, placeAttribute, lang, URL);
 	var returnString, URLprefix, URLsuffix;
 
 	if ( lang == "he" ) {
@@ -1850,8 +1860,10 @@ createTableFromData = function (data) {
 			'</div>' +
                /* SHARE LINE  */
                '<div class="share-info-row row row-eq-height place-row">' +
-                    '<button class="place-share-button en"  data-place="info_panel_'+i+'"  onclick="shareToWeb(\'info_panel_' + i + '\', \'' + encodeURI(en_name) + '\', \'' + data[i].lat  +'\', \'' + data[i].lon  +'\'   )">'+'<i class="fa fa-fw fa-share-alt"></i> Share' + '</button>' +
-                    '<button class="place-share-button he"  data-place="info_panel_'+i+'"  onclick="shareToWeb(\'info_panel_' + i + '\', \'' + encodeURI(he_name) + '\', \'' + data[i].lat + '\', \'' + data[i].lon + '\'   )">'+'<i class="fa fa-fw fa-share-alt"></i> שיתוף' + '</button>' +
+                    // '<button class="place-share-button en"  data-place="info_panel_'+i+'"  no_onclick="shareToWeb(\'info_panel_' + i + '\', \'' + encodeURI(en_name) + '\', \'' + data[i].lat  +'\', \'' + data[i].lon  +'\'   )">'+'<i class="fa fa-fw fa-share-alt"></i> Share' + '</button>' +
+                    // '<button class="place-share-button he"  data-place="info_panel_'+i+'"  no_onclick="shareToWeb(\'info_panel_' + i + '\', \'' + encodeURI(he_name) + '\', \'' + data[i].lat + '\', \'' + data[i].lon + '\'   )">'+'<i class="fa fa-fw fa-share-alt"></i> שיתוף' + '</button>' +
+                    '<button class="place-share-button en"  data-place="info_panel_' + i + '"  data-name="' + encodeURI(en_name) + '" data-lat="' + data[i].lat + '" data-lon="' + data[i].lon + '">'+'<i class="fa fa-fw fa-share-alt"></i> Share' + '</button>' +
+                    '<button class="place-share-button he"  data-place="info_panel_' + i + '"  data-name="' + encodeURI(he_name) + '" data-lat="' + data[i].lat + '" data-lon="' + data[i].lon + '">'+'<i class="fa fa-fw fa-share-alt"></i> שיתוף' + '</button>' +
                '</div>' +
 
 		'</div>';
@@ -2061,6 +2073,14 @@ $( document ).ready(function() {
                     );
                }
           }
+     });
+
+     /* Share Click Handler */
+     $(".place-share-button").on("click", function (event) {
+          event.stopPropagation();
+          event.stopImmediatePropagation();
+          // console.log($(this).data('place'),'\n',$(this).data('name'),'\n',$(this).data('lat'),'\n',$(this).data('lon'));
+          shareToWeb( $(this).data("place"), $(this).data("name"), $(this).data("lat"), $(this).data("lon") );
      });
 
      /* Handle any ?goto= parameters on incoming URL */
