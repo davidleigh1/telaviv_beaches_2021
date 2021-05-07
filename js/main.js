@@ -395,7 +395,7 @@ tlv_data = [
                cross_streets: ['כ"ג יורדי הסירה'],
                close_streets: ["נמל תל אביב / הירקון"],
                approx_address: "רח' נמל ת\"א 9, תל אביב",
-               restaurants: ["קיטשן מרקט (Hanger 12)", "ארומה (האנגר 9)", "קפה נימרוד (האנגר 8)" ,"בני הדייג (האנגר 8)"],
+               restaurants: ["קיטשן מרקט (Hanger 12)", "ארומה (האנגר 9)", "קפה נימרוד (האנגר 8)", "בני הדייג (האנגר 8)"],
                notes_access: "הנמל הישן ומזרקה / שובר גלים פונה לכיוון מסעדת בני הדייג / ארומה (האנגר 8 ו- 9) וקסטרו / קפה קפה (האנגר 4 ו- 21)",
                landmarks: ["נמל תל אביב"],
           },
@@ -1295,7 +1295,7 @@ tlv_data = [
                cross_streets: ["רציף העליה השניה", "שמואל וסולטנה טאג'יר"],
                close_streets: ["יהודה הימית", "מגדלור"],
                approx_address: "רציף העלייה השנייה, נמל יפו",
-               restaurants: ["לאביט", "הזקן וים", "קאזה נובה", "הקונטיינר", "מסעדת פרישמן", "קפה קפיש", "בלאקאוט"],
+               restaurants: ["לאביט", "הזקן וים", "קאזה נובה", "הקונטיינר", "מסעדת פרישמן", "קפה קפיש", "בלאקאוט", "הדייגים (מחסן 1)"],
                hotels: [],
                notes_access:
                     "מכוניות/אמבולנס - גישה דרך כניסה ראשית בנמל יפו / רח' יהודה הימית (<a class='' href='https://www.google.com/maps/place/32.0521581,34.7502533' target='_blank'>(32.0521581,34.7502533)</a>), בין האנגר 1 (חדש) להאנגר 2 (ישן)",
@@ -1312,7 +1312,7 @@ tlv_data = [
           cross_streets: ["Retsif HaAliya HaShniya", "Shmuel and Sultana Tagger"],
           close_streets: ["Yehuda Hayamit", "HaMigdalor"],
           approx_address: "Nemal Yafo, Tel Aviv",
-          restaurants: ["Loveat", "The Old Man And The Sea", "Casa Nova", "The Container", "Fisherman's Restaurant", "Cafe Kapish", "Blackout"],
+          restaurants: ["Loveat", "The Old Man And The Sea", "Casa Nova", "The Container", "Fisherman's Restaurant 'HaDayagim' (Machsan 1)", "Cafe Kapish", "Blackout"],
           hotels: [],
           notes_access:
                "Cars/Ambulances - Access via main entrance @ Nemal Yafo St / Yehuda Hayamit St <a class='' href='https://www.google.com/maps/place/32.0521581,34.7502533' target='_blank'>(32.0521581,34.7502533)</a> between Hanger 1 (new) and Hanger 2 (old)",
