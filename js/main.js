@@ -79,7 +79,7 @@ tlv_data = [
           // "on_foot_only": true,
           // "parking": [],
           pre_nav_msg:
-               "Motorcycles only - Enter HaTzuk North/Mandarin Beach and turn right (north) until the end of the paved tayelet. Cars/Motorcycles - Drive north through the parking and continue along the cliff until the end of the fence (on your left). You can then (carefully!) go down the cliffs to the sea shore.",
+               "<b>🏍️ Motorcycles ONLY</b> - Enter HaTzuk North/Mandarin Beach via the gate and go down to the beach/tayelet. Turn right (north) until the end of the paved tayelet. <br><b>🚗 Cars/Motorcycles</b> - Drive north through the parking and continue along the cliff until the end of the fence (on your left). You can then (carefully!) go down the cliffs to the sea shore.",
           type: "landmark",
      },
      {
@@ -113,7 +113,7 @@ tlv_data = [
           has_gates: true,
           motorcycle_access: true,
           car_access: false,
-          pre_nav_msg: "Motorcycles only - Enter via main gate. Cars - Enter via electric barrier to LEFT of main gate",
+          pre_nav_msg: "<b>🏍️ Motorcycles</b> only - Enter via main gate. <br><b>🚗 Cars</b> - Enter via electric barrier to LEFT of main gate",
           type: "beach_official",
      },
      {
@@ -182,7 +182,7 @@ tlv_data = [
           car_access: false,
           on_foot_only: true,
           pre_nav_msg:
-               "Access via road 150m south of Paz Lamed Petrol Station. \\n\\nMotorcycles can continue 250m up the hill towards army base. Stop at bend in road and go down carefully on foot.\\n\\nCars must stop at the barrier and continue on foot.",
+               "Access via road 150m south of Paz Lamed Petrol Station. <br><b>🏍️ Motorcycles</b> can continue 250m up the hill towards army base. Stop at bend in road and go down carefully by foot. <br><b>🚗 Cars</b> must stop at the barrier and continue on foot.",
           type: "beach_unofficial",
      },
      {
@@ -530,7 +530,7 @@ tlv_data = [
                     "גישה לאופנועים רק דרך הרמפה מצפון, מול רח' נודראו (<a class='' href='https://www.google.com/maps/place/32.09218712,34.77260292' target='_blank'>32.09218712,34.77260292</a>); או מכיוון דרום מול רח' ז'בוטינסקי; או מימין למלון הילטון דרך כביש הגישה של החניה (<a class='' href='https://www.google.com/maps/place/32.08995791,34.77214158' target='_blank'>32.08995791,34.77214158</a>)",
                landmarks: ["Playground (<a class='' href='https://www.google.com/maps/place/32.09045784,34.77125108' target='_blank'>32.09045784,34.77125108</a>)", "Embassy of Switzerland"],
                pre_nav_msg:
-                    "Motorcycle access IS ONLY via ramps at North (opposite Nordau @ 32.09218712,34.77260292) and South (opposite Jabotinsky, to the right of the Hilton Parking Service Road @ 32.08995791,34.77214158)",
+                    "Motorcycle access IS ONLY via ramps at North (opposite Nordau @ <span onclick='onclickmap(this);'>32.09218712,34.77260292</span>) and South (opposite Jabotinsky, to the right of the Hilton Parking Service Road @ <span class='onclickmap' onclick='onclickmap(this);'>32.08995791,34.77214158</span>)",
           },
           name: "Park HaAtzmaut (North)",
           lat: "32.08985111",
@@ -552,7 +552,7 @@ tlv_data = [
           motorcycle_access: true,
           car_access: false,
           pre_nav_msg:
-               "Motorcycle access IS ONLY via ramps at North (opposite Nordau @ 32.09218712,34.77260292) and South (opposite Jabotinsky, to the right of the Hilton Parking Service Road @ 32.08995791,34.77214158)",
+               "Motorcycle access IS ONLY via ramps at North (opposite Nordau @ <span class='onclickmap' onclick='onclickmap(this);'>32.09218712,34.77260292</span>) and South (opposite Jabotinsky, to the right of the Hilton Parking Service Road @ <span class='onclickmap' onclick='onclickmap(this);'>32.08995791,34.77214158</span>)",
           type: "park",
      },
      {
@@ -685,7 +685,7 @@ tlv_data = [
           hotels: ["Hilton", "Melody (corner Jabotinsky)"],
           notes_access: "At this point (as it crosses Alozorov at the entrance to the Hilton) Eliezer Peri (to the south) changes name to HaYarkon (to the North)",
           landmarks: [
-               "Mosquito statue (32.08853083, 34.77055371)",
+               "Mosquito statue (<span class='onclickmap' onclick='onclickmap(this);'>32.08853083, 34.77055371</span>)",
                "Hilton HaAtzmaut Bridge - South (Above Emanuel Sela / Above entrance to Hilton)",
                "Hilton HaAtzmaut Bridge - North (Above 1174 / Above service entrance to Hilton / Opposite Jabotinsky)",
                "Opposite British Embassy",
@@ -765,7 +765,7 @@ tlv_data = [
           motorcycle_access: true,
           car_access: false,
           pre_nav_msg:
-               "\\n From North only:\\n\\nMotorbikes should take ramp down to the tayelet from outside the Renaissance Hotel.\\n\\nFrom South:\\n\\nU-turn on HaYarkon at Sheraton Hotel and stop at the entrance to the tayelet/car park. Opposite French Embassy. Next to Cafe London.",
+               "<b>From North <u>only</u>:</b><br><b>🏍️ Motorbikes</b> should take ramp down to the tayelet from outside the Renaissance Hotel.<br><br><b>From South:</b><br>U-turn on HaYarkon at Sheraton Hotel and stop at the entrance to the tayelet/car park. Opposite French Embassy. Next to Cafe London.",
           type: "beach_official",
      },
      {
@@ -1026,7 +1026,7 @@ tlv_data = [
           car_access: false,
           parking: ["Dolphinarium"],
           pre_nav_msg:
-               "Cars/Ambulances - From North @ Car Park North Entrance (32.06769015, 34.76285309).  From all directions @ Car Park Central Entrance (32.06290544, 34.76141542) opposite Shenkar Street. From South @ Etzel Museum (32.05929344, 34.75937158) on Nahum Goldmann St.",
+               "Cars/Ambulances - From North @ Car Park North Entrance (<span class='onclickmap' onclick='onclickmap(this);'>32.06769015, 34.76285309</span>).  From all directions @ Car Park Central Entrance (<span class='onclickmap' onclick='onclickmap(this);'>32.06290544, 34.76141542</span>) opposite Shenkar Street. From South @ Etzel Museum (<span class='onclickmap' onclick='onclickmap(this);'>32.05929344, 34.75937158</span>) on Nahum Goldmann St.",
           type: "park",
      },
      {
@@ -1060,7 +1060,7 @@ tlv_data = [
           motorcycle_access: true,
           car_access: true,
           parking: ["Dolphinarium"],
-          pre_nav_msg: "Cars/Ambulances - Access via South @ Etzel Museum (32.05929344, 34.75937158) on Nahum Goldmann St.",
+          pre_nav_msg: "Cars/Ambulances - Access via South @ Etzel Museum (<span class='onclickmap' onclick='onclickmap(this);'>32.05929344, 34.75937158</span>) on Nahum Goldmann St.",
           type: "restaurant",
      },
      {
@@ -1098,7 +1098,7 @@ tlv_data = [
           motorcycle_access: true,
           car_access: true,
           parking: ["Dolphinarium"],
-          pre_nav_msg: "Cars/Ambulances - Access via South @ Etzel Museum (32.05929344, 34.75937158) on Nahum Goldmann St.",
+          pre_nav_msg: "Cars/Ambulances - Access via South @ Etzel Museum (<span class='onclickmap' onclick='onclickmap(this);'>32.05929344, 34.75937158</span>) on Nahum Goldmann St.",
           type: "beach_official",
      },
      {
@@ -1134,11 +1134,11 @@ tlv_data = [
      },
      {
           he: {
-               name: "גן צ'\רלס קלור (דרום)",
-               aka: "גן צ'\ארלס קלור דרום",
+               name: "גן צ'רלס קלור (דרום)",
+               aka: "גן צ'ארלס קלור דרום",
                cross_streets: ["נחום גולדמן"],
                close_streets: ["נחום גולדמן"],
-               approx_address: "גן צ'\רלס קלור, נחום גולמן 2, תל אביב",
+               approx_address: "גן צ'רלס קלור, נחום גולמן 2, תל אביב",
                landmarks: ["גשר הולכי רגל כחול"],
                notes_access: "מגשר הולכי הרגל הכחול בדרום",
                parking: ["דולפינריום"],
@@ -1783,7 +1783,10 @@ createTableFromData = function (data) {
 
 		if ( data[i].pre_nav_msg && data[i].pre_nav_msg.length > 0 ){
 			var txt = data[i]["he"].pre_nav_msg || data[i].pre_nav_msg;
-			accessInfo = '<span class="pull-right pointer" onclick="event.stopPropagation();alert(\'' + txt + '\')"><i class="fa fa-2x fa-fw fa-info-circle pre_nav_msg text-warning"></i></span>';
+               var title = data[i]["he"].name || data[i].name;
+			// accessInfo = '<span class="pull-right pointer" onclick="event.stopPropagation();toastr[\'info\'](\'' + txt + '\',\'' + title + '\')"><i class="fa fa-2x fa-fw fa-info-circle pre_nav_msg text-warning"></i></span>';
+			accessInfo = '<span class="pre_nav_msg_button en pull-right pointer" data-lang="en" data-tlv_data_id="' + i + '"><i class="fa fa-2x fa-fw fa-info-circle pre_nav_msg text-warning"></i></span>';
+			accessInfo += '<span class="pre_nav_msg_button he pull-right pointer" data-lang="he" data-tlv_data_id="' + i + '"><i class="fa fa-2x fa-fw fa-info-circle pre_nav_msg text-warning"></i></span>';
 		} else{
 			accessInfo = '';
 		}
@@ -1800,11 +1803,11 @@ createTableFromData = function (data) {
 		info_panel = '<div id="info_panel_'+i+'" class="info_panel container collapse">' +
 			/* TOP LINE */
 			'<div class="top-info-row row row-eq-height place-row">' +
-				'<div class="place-detail col-xs-12">' + 
-					'<span class="info-item approx_address en">' + 					
+				'<div class="place-detail col-xs-12">' +
+					'<span class="info-item approx_address en">' +
 						buildAddressLink( data[i], "approx_address", "en", '<i class="fa fa-fw fa-map-o"></i>', "https://www.google.com/maps/place/"+data[i].approx_address.replace(/ /g,'+')+"/" ) +  
 					'</span>' +
-					'<span class="info-item approx_address he">' + 
+					'<span class="info-item approx_address he">' +
 						buildAddressLink( data[i], "approx_address", "he", '<i class="fa fa-fw fa-map-o"></i>', "https://www.google.com/maps/place/"+data[i].approx_address.replace(/ /g,'+')+"/" ) +  
 					'</span>' +
 					'<span class="info-item cross_streets en">' + 
@@ -1907,19 +1910,18 @@ function updateLang(specifyLang) {
 		$('html').attr('lang',specifyLang);
 		$('html').attr('dir', (specifyLang != 'he')?'ltr':'rtl' );
 	}
-	var currentLang = $('html').attr('lang');
-	var previousLang = currentLang == 'en' ? 'he' : 'en';
-     /* Set Cookie for next time... */
-     setCookie('lang',currentLang);
+	// var currentLang = $('html').attr('lang');
+	// var previousLang = currentLang == 'en' ? 'he' : 'en';
+     // /* Set Cookie for next time... */
+     // setCookie('lang',currentLang);
 
-	/* In general, we are not swapping content.  All content is added to DOM.  Simply showing and hiding based the selected lang */
-	$('.'+currentLang).show();
-	$('.'+previousLang).hide();
+	// /* In general, we are not swapping content.  All content is added to DOM.  Simply showing and hiding based the selected lang */
+	// $('.'+currentLang).show();
+	// $('.'+previousLang).hide();
 
 	/* Update placeholder for search field (to avoid having two search fields in the DOM) */
 	var newText = currentLang == "en" ? "Search... for lifeguard huts, type #.. eg #25" : "חפשו... עבור סוכת מציל, הקלד #+מספר (לדוגמה #25)";
 	$("#searchfield").attr("placeholder", newText);
-
 
 	/* Reverse pull left and pull right */
 	if ( $('html').attr('dir') == 'rtl') {
@@ -1937,6 +1939,20 @@ function updateLang(specifyLang) {
 			$(this).attr("style", "float:left !important;text-align:left !important;");
 		});
 	}
+
+     /* Moved after the language direction change as the !important revealed them again */
+	var currentLang = $("html").attr("lang");
+     var previousLang = currentLang == "en" ? "he" : "en";
+     /* Set Cookie for next time... */
+     setCookie("lang", currentLang);
+
+     /* In general, we are not swapping content.  All content is added to DOM.  Simply showing and hiding based the selected lang */
+     $("." + currentLang).show();
+     $("." + previousLang).hide();
+
+
+
+
 }
 
 // function showFilterbarBool(showBool) {
@@ -1972,6 +1988,12 @@ function showFilterbar(showBool) {
           window.scroll(0, 0);
      }
 }
+
+function onclickmap(thisElem) {
+     console.log(thisElem.innerHTML);
+     window.open("https://www.google.com/maps/place/" + thisElem.innerHTML, "_blank", "location=0");
+}
+
 
 // $(window).on('beforeunload', function() {
 // 	console.log('beforeunload');
@@ -2032,9 +2054,9 @@ $( document ).ready(function() {
      /* Search Field Clear/Reset Button */
      $(".search-reset").click(function (e) {
           e.stopPropagation();
-          $("#searchfield").val("");         // Clear the input field
-          simpleSearch();                    // Reset the search that were based in the cleared value
-          $("#searchfield").focus();         // Restore the focus on the search field
+          $("#searchfield").val(""); // Clear the input field
+          simpleSearch(); // Reset the search that were based in the cleared value
+          $("#searchfield").focus(); // Restore the focus on the search field
      });
 
      $("button.filterButton").click(function (e) {
@@ -2080,7 +2102,42 @@ $( document ).ready(function() {
           event.stopPropagation();
           event.stopImmediatePropagation();
           // console.log($(this).data('place'),'\n',$(this).data('name'),'\n',$(this).data('lat'),'\n',$(this).data('lon'));
-          shareToWeb( $(this).data("place"), $(this).data("name"), $(this).data("lat"), $(this).data("lon") );
+          shareToWeb($(this).data("place"), $(this).data("name"), $(this).data("lat"), $(this).data("lon"));
+     });
+
+     /* Access/pre_nav_msg Message (i) Handler */
+     $("span.pre_nav_msg_button").on("click", function (event) {
+          event.stopPropagation();
+          event.stopImmediatePropagation();
+          var thisButtonId = $(this).data("tlv_data_id");
+          var thisNavMessage;
+          var thisNavTitle;
+          if ($(this).data("lang") == "en"){
+               /* English - revert to Hebrew */
+               // Set thisNavMessage
+               thisNavMessage = tlv_data[$(this).data("tlv_data_id")].pre_nav_msg || tlv_data[$(this).data("tlv_data_id")].he.pre_nav_msg;
+               // Set thisNavTitle
+               thisNavTitle = tlv_data[$(this).data("tlv_data_id")].name || tlv_data[$(this).data("tlv_data_id")].he.name;
+          } else {
+               /* Assume Hebrew - revert to English */
+               // Set thisNavMessage
+               thisNavMessage = tlv_data[$(this).data("tlv_data_id")].he.pre_nav_msg || tlv_data[$(this).data("tlv_data_id")].pre_nav_msg;
+               // Set thisNavTitle
+               thisNavTitle = tlv_data[$(this).data("tlv_data_id")].he.name || tlv_data[$(this).data("tlv_data_id")].name;
+          }
+
+          console.log(
+               $(this).data("lang"),
+               $(this).data("tlv_data_id"),
+               '\n',thisNavMessage,
+               '\n',thisNavTitle
+          );
+
+          try {
+               toastr["info"](thisNavMessage, thisNavTitle);
+          } catch (err) {
+               console.log("Toastr Error! Button ID: '" + thisButtonId + "' with attempted language: '" + $(this).data("lang") + "' Error:\n", err);
+          }
      });
 
      /* Handle any ?goto= parameters on incoming URL */
@@ -2103,6 +2160,28 @@ $( document ).ready(function() {
      } else {
           // console.log("URL 'queryVars.show_filter' NOT found and no 'show_filter' cookie was found!");
      }
+
+     /* Toastr Notifications */
+     toastr.options = {
+          closeButton: true,
+          debug: false,
+          newestOnTop: false,
+          progressBar: true,
+          // positionClass: "toast-bottom-right",
+          positionClass: "toast-bottom-full-width",
+          preventDuplicates: true,
+          onclick: null,
+          showDuration: "300",
+          hideDuration: "1000",
+          timeOut: "16000",
+          extendedTimeOut: "1000",
+          showEasing: "swing",
+          hideEasing: "linear",
+          showMethod: "fadeIn",
+          hideMethod: "fadeOut",
+     };
+
+     // toastr["success"]("Loaded Successfully");
 });
 
 // function loadingDone() {

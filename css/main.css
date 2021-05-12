@@ -427,6 +427,17 @@ span.info-feedback {
      opacity: 0.7;
 }
 
+.onclickmap{
+     text-decoration: underline;
+     text-decoration-style: dotted;
+     cursor: pointer;
+     background-color: rgb(211 211 211 / 50%);
+}
+
+#toast-container>div {
+     opacity: 1;
+}
+
 
 
 /* tlv.works logo */
