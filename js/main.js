@@ -2012,8 +2012,22 @@ $( document ).ready(function() {
      /* Scroll to hide search */
      window.scroll(0, 60);
 
-     /* Simulate effect of click to hide the non-selected language */
-
+     /* Get Query String (location.search) as it might contain settings we should use */
+     /* Polyfill as Object.fromEntries isn't supported on my old iphone */
+     /* Source: https://vanillajstoolkit.com/polyfills/objectfromentries/ */
+     if (!Object.fromEntries) {
+          Object.fromEntries = function (entries) {
+               if (!entries || !entries[Symbol.iterator]) {
+                    throw new Error("Object.fromEntries() requires a single iterable argument");
+               }
+               let obj = {};
+               for (let [key, value] of entries) {
+                    obj[key] = value;
+               }
+               return obj;
+          };
+     }
+     /* Get the URL query variables... */
      var queryVars = Object.fromEntries([...new URLSearchParams(location.search)]);
      // console.log("queryVars:", queryVars);
 
@@ -2112,7 +2126,7 @@ $( document ).ready(function() {
           var thisButtonId = $(this).data("tlv_data_id");
           var thisNavMessage;
           var thisNavTitle;
-          if ($(this).data("lang") == "en"){
+          if ($(this).data("lang") == "en") {
                /* English - revert to Hebrew */
                // Set thisNavMessage
                thisNavMessage = tlv_data[$(this).data("tlv_data_id")].pre_nav_msg || tlv_data[$(this).data("tlv_data_id")].he.pre_nav_msg;
@@ -2126,12 +2140,7 @@ $( document ).ready(function() {
                thisNavTitle = tlv_data[$(this).data("tlv_data_id")].he.name || tlv_data[$(this).data("tlv_data_id")].name;
           }
 
-          console.log(
-               $(this).data("lang"),
-               $(this).data("tlv_data_id"),
-               '\n',thisNavMessage,
-               '\n',thisNavTitle
-          );
+          console.log($(this).data("lang"), $(this).data("tlv_data_id"), "\n", thisNavMessage, "\n", thisNavTitle);
 
           try {
                toastr["info"](thisNavMessage, thisNavTitle);
