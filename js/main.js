@@ -1547,86 +1547,45 @@ function logError(message) {
      logText(message, true);
 }
 
-async function shareToWeb(gotoAnchor,name,lat,lon) {
-
-     // console.log('shareToWeb');
-     // console.log(gotoAnchor, name, lat, lon);
-     // console.log(name);
-
+async function shareToWeb(gotoAnchor,name,lat,lon,shareType) {
      // const waze_url = "waze://?ll=" + decodeURI(lat) + "," + decodeURI(lon) + "&navigate=yes";
      const title_input = "Share '" + decodeURI(name) + "'";
-     const waze_url = "waze.com/ul?ll=" + decodeURI(lat) + "%2C" + decodeURI(lon) + "&navigate=yes";
+     const waze_url = "waze.com/ul?ll=" + decodeURI(lat) + "%2C" + decodeURI(lon) + "%26navigate=yes";
      const gmaps_url = "www.google.com/maps/place/" + decodeURI(lat) + "," + decodeURI(lon);
-     const url_input = "https://tlv.works/telaviv_beaches/?goto="+gotoAnchor;
+     const url_input = "https://tlv.works/telaviv_beaches/?goto=" + gotoAnchor;
      const text_input = "*" + decodeURI(name) + "* " + decodeURI("%0D%0A") + "" + url_input + "" + decodeURI("%0D%0A%0D%0A") + "Waze: " + waze_url + "" + decodeURI("%0D%0A") + "GMap: " + gmaps_url;
-
-     // const title = title_input.value;
-     // const text = text_input.value;
-     // const url = url_input.value;
+     const non_sharing_text_input = "*" + decodeURI(name) + "*" + " - " + url_input + " %0D%0A%0D%0A" + "Waze: " + waze_url + " %0D%0A%0D%0A" + "GMap: " + gmaps_url;
 
      const shareObject = {
           title: text_input,
-          text: text_input
+          text: text_input,
      };
      // url: url_input,
 
-     console.log(shareObject);
+     console.log(shareObject, non_sharing_text_input);
 
-     // try {
-     //      // await navigator.share(shareObject);
-     //      await navigator.share({ 'title':title_input, 'text':text_input, 'url':url_input });
-     //      // alert("Successfully sent share");
-     // } catch (error) {
-     //      alert("Error sharing: " + error);
-     // }
-
-     navigator
-          .share(shareObject)
-          .then(() => {
-               console.log("Thank you for sharing!", shareObject);
-          })
-          .catch(console.error);
+     if (shareType == "sms") {
+          window.open("sms:?&body=" + non_sharing_text_input, "_blank", "location=0");
+          return;
+     }
+     if (shareType == "wap") {
+          window.open("https://wa.me/?text=" + non_sharing_text_input, "_blank", "location=0");
+          return;
+     }
+     /* No need to check for (shareType == "wap") as this is our default/catch-all behaviour */
+     if (navigator.share) {
+          navigator
+               .share(shareObject)
+               .then(() => {
+                    // console.log("Thank you for sharing!", shareObject);
+                    // toastr["success"]("Shared Successfully :)");
+               })
+               .catch(console.error);
+     } else {
+          var sharingUnsupportedMsg = $("html").attr("lang") == "en" ? "Sharing unsupported." : "השיתוף לא נתמך.";
+          toastr["info"](sharingUnsupportedMsg);
+     }
 }
-
-// async function shareToWebDelay() {
-//      await sleep(6000);
-//      shareToWeb();
-// }
-
-
-// function clicked(params) {
-//      console.log("Clicked!", $(params));
-// }
-// function onLoad() {
-//      // // Checkboxes disable and delete textfields.
-//      // document.querySelector("#title_checkbox").addEventListener("click", checkboxChanged);
-//      // document.querySelector("#text_checkbox").addEventListener("click", checkboxChanged);
-//      // document.querySelector("#url_checkbox").addEventListener("click", checkboxChanged);
-
-//      // document.querySelector(".place-share-button").addEventListener("click", clicked);
-//      // document.querySelector("#share-no-gesture").addEventListener("click", shareToWebDelay);
-//      // $(".place-share-button").on("click", function (event) {
-//      //      event.stopPropagation();
-//      //      event.stopImmediatePropagation();
-//      //      //(... rest of your JS code)
-//      //      clicked();
-//      // });
-//      if (navigator.share === undefined) {
-//           if (window.location.protocol === "http:") {
-//                // navigator.share() is only available in secure contexts.
-//                window.location.replace(window.location.href.replace(/^http:/, "https:"));
-//           } else {
-//                logError("Error: You need to use a browser that supports this draft " + "proposal.");
-//           }
-//      }
-// }
-/* ------------------------------ */
-
-
-
-
-
-
 
 getString = function (thisPlaceObj, placeAttribute, lang = "en", iconHTML) {
 	//console.log('getString()', thisPlaceObj, placeAttribute, lang);
@@ -1863,10 +1822,12 @@ createTableFromData = function (data) {
 			'</div>' +
                /* SHARE LINE  */
                '<div class="share-info-row row row-eq-height place-row">' +
-                    // '<button class="place-share-button en"  data-place="info_panel_'+i+'"  no_onclick="shareToWeb(\'info_panel_' + i + '\', \'' + encodeURI(en_name) + '\', \'' + data[i].lat  +'\', \'' + data[i].lon  +'\'   )">'+'<i class="fa fa-fw fa-share-alt"></i> Share' + '</button>' +
-                    // '<button class="place-share-button he"  data-place="info_panel_'+i+'"  no_onclick="shareToWeb(\'info_panel_' + i + '\', \'' + encodeURI(he_name) + '\', \'' + data[i].lat + '\', \'' + data[i].lon + '\'   )">'+'<i class="fa fa-fw fa-share-alt"></i> שיתוף' + '</button>' +
-                    '<button class="place-share-button en"  data-place="info_panel_' + i + '"  data-name="' + encodeURI(en_name) + '" data-lat="' + data[i].lat + '" data-lon="' + data[i].lon + '">'+'<i class="fa fa-fw fa-share-alt"></i> Share' + '</button>' +
-                    '<button class="place-share-button he"  data-place="info_panel_' + i + '"  data-name="' + encodeURI(he_name) + '" data-lat="' + data[i].lat + '" data-lon="' + data[i].lon + '">'+'<i class="fa fa-fw fa-share-alt"></i> שיתוף' + '</button>' +
+                    '<button class="place-share-button api en"   data-share-type="api" data-place="info_panel_' + i + '"  data-name="' + encodeURI(en_name) + '" data-lat="' + data[i].lat + '" data-lon="' + data[i].lon + '">'+'<i class="fa fa-fw fa-share-alt"></i> Share' + '</button>' +
+                    '<button class="place-share-button api he"   data-share-type="api" data-place="info_panel_' + i + '"  data-name="' + encodeURI(he_name) + '" data-lat="' + data[i].lat + '" data-lon="' + data[i].lon + '">'+'<i class="fa fa-fw fa-share-alt"></i> שיתוף' + '</button>' +
+                    '<button class="place-share-button wap en"   data-share-type="wap" data-place="info_panel_' + i + '"  data-name="' + encodeURI(en_name) + '" data-lat="' + data[i].lat + '" data-lon="' + data[i].lon + '">'+'<i class="fa fa-fw fa-share-alt"></i> Share (WhatsApp)' + '</button>' +
+                    '<button class="place-share-button wap he"   data-share-type="wap" data-place="info_panel_' + i + '"  data-name="' + encodeURI(he_name) + '" data-lat="' + data[i].lat + '" data-lon="' + data[i].lon + '">'+'<i class="fa fa-fw fa-share-alt"></i>שיתוף (ווטסאפ) ' + '</button>' +
+                    '<button class="place-share-button sms en"   data-share-type="sms" data-place="info_panel_' + i + '"  data-name="' + encodeURI(en_name) + '" data-lat="' + data[i].lat + '" data-lon="' + data[i].lon + '">'+'<i class="fa fa-fw fa-share-alt"></i> Share (SMS)' + '</button>' +
+                    '<button class="place-share-button sms he"   data-share-type="sms" data-place="info_panel_' + i + '"  data-name="' + encodeURI(he_name) + '" data-lat="' + data[i].lat + '" data-lon="' + data[i].lon + '">'+'<i class="fa fa-fw fa-share-alt"></i>שיתוף (SMS) ' + '</button>' +
                '</div>' +
 
 		'</div>';
@@ -2031,8 +1992,8 @@ $( document ).ready(function() {
      var queryVars = Object.fromEntries([...new URLSearchParams(location.search)]);
      // console.log("queryVars:", queryVars);
 
-     /* Set language on load */
-     /* lang value taken in the following order: URL > Cookie > Default    */
+     // /* Set language on load */
+     // /* lang value taken in the following order: URL > Cookie > Default    */
      if (["en", "he"].includes(queryVars.lang)) {
           updateLang(queryVars.lang);
      } else if (["en", "he"].includes(getCookie("lang"))) {
@@ -2115,9 +2076,18 @@ $( document ).ready(function() {
      $(".place-share-button").on("click", function (event) {
           event.stopPropagation();
           event.stopImmediatePropagation();
+          console.log($(this).data("share-type"));
           // console.log($(this).data('place'),'\n',$(this).data('name'),'\n',$(this).data('lat'),'\n',$(this).data('lon'));
-          shareToWeb($(this).data("place"), $(this).data("name"), $(this).data("lat"), $(this).data("lon"));
+          shareToWeb($(this).data("place"), $(this).data("name"), $(this).data("lat"), $(this).data("lon"), $(this).data("share-type"));
      });
+
+     /* Toggle Share Buttons based on support for navigator.share API - doesn't work on my test iphone */
+     if (!navigator.share) {
+          $(".place-share-button.api").remove();
+     } else {
+          $(".place-share-button.sms").remove();
+          $(".place-share-button.wap").remove();
+     }
 
      /* Access/pre_nav_msg Message (i) Handler */
      $("span.pre_nav_msg_button").on("click", function (event) {
@@ -2189,6 +2159,17 @@ $( document ).ready(function() {
           showMethod: "fadeIn",
           hideMethod: "fadeOut",
      };
+
+     /* Set language on load */
+     /* lang value taken in the following order: URL > Cookie > Default    */
+     /* AS WE MODIFY ELEMENTS ONLOAD - THIS BIT *MUST* RUN LAST! */
+     // if (["en", "he"].includes(queryVars.lang)) {
+     //      updateLang(queryVars.lang);
+     // } else if (["en", "he"].includes(getCookie("lang"))) {
+     //      updateLang(getCookie("lang"));
+     // } else if (!$("html").attr("lang")) {
+     //      updateLang("he");
+     // }
 
      // toastr["success"]("Loaded Successfully");
 });

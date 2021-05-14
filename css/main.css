@@ -412,11 +412,33 @@ span.info-feedback {
 }
 
 /* Share UI */
-.place-share-button {
+.place-share-button.api {
      margin: 5px 5px;
      padding: 10px;
      width: 100%;
      background-color: skyblue;
+     border: 1px;
+     border-radius: 5px;
+     text-align: center;
+     text-decoration: none;
+}
+.place-share-button.wap {
+     display: none;
+     margin: 5px 5px;
+     padding: 10px;
+     width: 100%;
+     background-color: #dcf8c6;
+     border: 1px;
+     border-radius: 5px;
+     text-align: center;
+     text-decoration: none;
+}
+.place-share-button.sms {
+     display: none;
+     margin: 5px 5px;
+     padding: 10px;
+     width: 100%;
+     background-color: #3740ff4d;
      border: 1px;
      border-radius: 5px;
      text-align: center;
