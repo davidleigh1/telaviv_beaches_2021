@@ -1956,10 +1956,73 @@ function onclickmap(thisElem) {
 }
 
 
-// $(window).on('beforeunload', function() {
-// 	console.log('beforeunload');
-// 	// window.scroll(0, 60);
-// });
+/* Detect how the app was launched */
+function getPWADisplayMode() {
+     console.log("getPWADisplayMode()");
+     const isStandalone = window.matchMedia("(display-mode: standalone)").matches;
+     if (document.referrer.startsWith("android-app://")) {
+          return "twa";
+     } else if (navigator.standalone || isStandalone) {
+          return "standalone";
+     }
+     return "browser";
+}
+
+/* Show a pop-up/promotion begging to install the app */
+function showInstallPromotion(params) {
+     const installMessage = "Install me please!";
+     console.log(installMessage);
+     toastr["warning"](installMessage);
+}
+
+/* Hide a pop-up/promotion begging to install the app */
+function hideInstallPromotion(params) {
+     const hideInstallMessage = "Hiding installation...";
+     console.log(hideInstallMessage);
+     toastr["info"](hideInstallMessage);
+}
+
+/* Handle and update UI based on DisplayMode */
+function updateDisplayMode(displayMode) {
+     /* Handle cases where the app is already installed */
+     displayMode = displayMode || getPWADisplayMode();
+     console.log("displayMode:", displayMode);
+
+     switch (displayMode) {
+          case "twa":
+          case "standalone":
+               setCookie("is_pwa_installed", true);
+               console.log("Already installed!  Removing installButton");
+               $(".installButton").remove();
+               break;
+          case "browser":
+               setCookie("is_pwa_installed", false);
+               if (!getCookie("is_installable")) {
+                    console.log("Uninstallable!  Removing installButton");
+                    $(".installButton").remove();
+               } else {
+                    $(".installButton").show();
+                    console.log("showing installButton");
+               }
+               break;
+          default:
+               console.log("default case");
+               break;
+     }
+
+     /* Show the Displaymode in header */
+     $("#displayMode").text(displayMode);
+     $("#is_installed").text(getCookie("is_pwa_installed"));
+     $("#is_installable").text(getCookie("is_installable"));
+     $("#is_ios").text(isIos());
+
+     return;
+}
+
+function isIos() {
+     return ['iPhone', 'iPad', 'iPod'].includes(navigator.platform);
+}
+
 
 $( document ).ready(function() {
      // console.log('ONREADY');
@@ -2160,16 +2223,111 @@ $( document ).ready(function() {
           hideMethod: "fadeOut",
      };
 
-     /* Set language on load */
-     /* lang value taken in the following order: URL > Cookie > Default    */
-     /* AS WE MODIFY ELEMENTS ONLOAD - THIS BIT *MUST* RUN LAST! */
-     // if (["en", "he"].includes(queryVars.lang)) {
-     //      updateLang(queryVars.lang);
-     // } else if (["en", "he"].includes(getCookie("lang"))) {
-     //      updateLang(getCookie("lang"));
-     // } else if (!$("html").attr("lang")) {
-     //      updateLang("he");
+     /* ------------------------------------------------------------------------------------------------ */
+     /* Custom Install mechanism */
+     /* Credit: https://web.dev/customize-install/ */
+
+     /* Let's establish if we CAN even install ourselves as a PWA */
+     let is_installable = true;
+     if (!("serviceWorker" in navigator)) {
+          is_installable = false;
+     }
+     setCookie("is_installable", is_installable);
+
+     // let is_ios = isIos();
+
+     // Initialize deferredPrompt for use later to show browser install prompt.
+     let deferredPrompt;
+
+     /* Wait to see if user/browser meets installation requirements */
+     /* Supress the browser default behaviour so we can customize the outcome */
+     window.addEventListener("beforeinstallprompt", (e) => {
+          // Prevent the mini-infobar from appearing on mobile
+          e.preventDefault();
+          // Stash the event so it can be triggered later.
+          deferredPrompt = e;
+          // Update UI notify the user they can install the PWA
+          showInstallPromotion();
+          // Optionally, send analytics event that PWA install promo was shown.
+          console.log("'beforeinstallprompt' event was fired.");
+     });
+
+     /* Handle the installation approval/request from user */
+     $(".installButton").on("click", async () => {
+     // buttonInstall.addEventListener("click", async () => {
+          if (!!deferredPrompt) {
+               console.log("deferredPrompt found!");
+               // Hide the app provided install promotion
+               hideInstallPromotion();
+               // Show the install prompt
+               deferredPrompt.prompt();
+               // Wait for the user to respond to the prompt
+               const { outcome } = await deferredPrompt.userChoice;
+               // Optionally, send analytics event with outcome of user choice
+               console.log(`User response to the install prompt: ${outcome}`);
+               // We've used the prompt, and can't use it again, throw it away
+               deferredPrompt = null;
+          } else {
+               console.log();
+               // } catch (installError){
+               let installErrorMsg = "Unable to install - No `beforeinstallprompt` event so `deferredPrompt` NOT found!";
+               toastr["error"](installErrorMsg);
+          }
+     });
+
+     /* Listen for a successful installation */
+     window.addEventListener("appinstalled", () => {
+          // Hide the app-provided install promotion
+          hideInstallPromotion();
+          // Clear the deferredPrompt so it can be garbage collected
+          deferredPrompt = null;
+          // Optionally, send analytics event to indicate successful install
+          const successfulInstallMsg = "PWA was installed";
+          console.log(successfulInstallMsg);
+          toastr["success"](successfulInstallMsg);
+     });
+
+     /* Update UI based on install status */
+     updateDisplayMode(getPWADisplayMode());
+
+     /* Handle cases where the app is already installed */
+     // const displayMode = getPWADisplayMode();
+     // console.log('displayMode:',displayMode);
+
+     // switch (displayMode) {
+     //      case "twa":
+     //      case "standalone":
+     //           console.log("removing installButton");
+     //           $(".installButton").remove();
+     //           break;
+     //      case "browser":
+     //           $(".installButton").show();
+     //           console.log("showing installButton");
+     //           break;
+     //      default:
+     //           console.log("default case");
+     //           break;
      // }
+     //
+     // /* Show the Displaymode in header */
+     // $("#displayMode").text(displayMode);
+
+     /* Track when the display mode changes */
+     window.matchMedia("(display-mode: standalone)").addEventListener("change", (evt) => {
+          let displayMode = "browser";
+          if (evt.matches) {
+               displayMode = "standalone";
+          }
+          // Log display mode change to analytics
+          console.log("DISPLAY_MODE_CHANGED", displayMode);
+          updateDisplayMode(displayMode);
+     });
+
+
+
+
+
+     /* ------------------------------------------------------------------------------------------------ */
 
      // toastr["success"]("Loaded Successfully");
 });
