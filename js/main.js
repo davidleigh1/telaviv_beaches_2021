@@ -1991,12 +1991,13 @@ function updateDisplayMode(displayMode) {
      switch (displayMode) {
           case "twa":
           case "standalone":
-               setCookie("is_pwa_installed", true);
-               console.log("Already installed!  Removing installButton");
+               console.log("Already installed! Setting cookies and removing installButton");
+               setCookie("was_installed", true);
+               setCookie("pwa_window", true);
                $(".installButton").remove();
                break;
           case "browser":
-               setCookie("is_pwa_installed", false);
+               setCookie("pwa_window", false);
                if (!getCookie("is_installable")) {
                     console.log("Uninstallable!  Removing installButton");
                     $(".installButton").remove();
@@ -2010,17 +2011,56 @@ function updateDisplayMode(displayMode) {
                break;
      }
 
+     // pwa_window;
+     // was_installed;
+     // is_installable;
+     // is_ios;
+
      /* Show the Displaymode in header */
+     // console.log("Updating display values...");
      $("#displayMode").text(displayMode);
-     $("#is_installed").text(getCookie("is_pwa_installed"));
+     $("#pwa_window").text(getCookie("pwa_window"));
+     $("#was_installed").text(getCookie("was_installed"));
      $("#is_installable").text(getCookie("is_installable"));
-     $("#is_ios").text(isIos());
+     // $("#app_detected").text(checkAppInstalled());
+     $("#is_ios").text(isIos().platform);
 
      return;
 }
 
 function isIos() {
-     return ['iPhone', 'iPad', 'iPod'].includes(navigator.platform);
+     const isIos = ['iPhone', 'iPad', 'iPod'].includes(navigator.platform);
+     const platform = navigator.platform;
+     const toReturn = { isIos, platform };
+     console.log("isIos() returning:",toReturn);
+     // alert(JSON.stringify(toReturn));
+     // toastr["info"](JSON.stringify(toReturn));
+     return toReturn;
+}
+
+
+async function checkAppInstalled (){
+
+     // emma = "awake";
+     // console.log(emma != "asleep");
+
+     let app_detected = false;
+     if ('getInstalledRelatedApps' in window.navigator) {
+          let relatedApps = await window.navigator.getInstalledRelatedApps();
+          // const { relatedApps } = await window.navigator.getInstalledRelatedApps()
+          if (relatedApps.length > 0){
+               app_detected = true;
+          }
+          else {
+               app_detected = false;
+          }
+          console.log("app_detected: ", app_detected, relatedApps);
+          // return app_detected;
+     } else {
+          console.log('getInstalledRelatedApps unavailable for app_detected!');
+     }
+     $("#app_detected").text(app_detected);
+     // return relatedApps;
 }
 
 
@@ -2226,6 +2266,7 @@ $( document ).ready(function() {
      /* ------------------------------------------------------------------------------------------------ */
      /* Custom Install mechanism */
      /* Credit: https://web.dev/customize-install/ */
+     /* Credit: https://javascript.plainenglish.io/creating-a-browser-agnostic-pwa-install-button-41039f312fbe  */
 
      /* Let's establish if we CAN even install ourselves as a PWA */
      let is_installable = true;
@@ -2234,6 +2275,30 @@ $( document ).ready(function() {
      }
      setCookie("is_installable", is_installable);
 
+     /* Check and set cookies if we can detect our own cookie showing PWA is installed */
+     if (!getCookie("was_installed")){
+          console.log('getCookie("was_installed") not found - setting to "false"');
+          setCookie("was_installed", false);
+     }
+
+     /* Detect via browser */
+     checkAppInstalled();
+
+     // let app_detected = false;
+     // if ('getInstalledRelatedApps' in window.navigator) {
+     //      let relatedApps = await window.navigator.getInstalledRelatedApps();
+     //      // const { relatedApps } = await window.navigator.getInstalledRelatedApps()
+     //      if (relatedApps.length > 0){
+     //           app_detected = true;
+     //      }
+     //      else {
+     //           app_detected = false;
+     //      }
+     //      console.log("app_detected: ", app_detected, relatedApps);
+     // } else {
+     //      console.log('getInstalledRelatedApps unavailable for app_detected!');
+     // }
+
      // let is_ios = isIos();
 
      // Initialize deferredPrompt for use later to show browser install prompt.
@@ -2241,12 +2306,17 @@ $( document ).ready(function() {
 
      /* Wait to see if user/browser meets installation requirements */
      /* Supress the browser default behaviour so we can customize the outcome */
-     window.addEventListener("beforeinstallprompt", (e) => {
+     window.addEventListener("beforeinstallprompt", function(e) {
+          /* If this event happened - the app is clearly installable AND not currently installed */
+          setCookie("is_installable", true);
+          setCookie("was_installed", false);
+
           // Prevent the mini-infobar from appearing on mobile
           e.preventDefault();
           // Stash the event so it can be triggered later.
           deferredPrompt = e;
           // Update UI notify the user they can install the PWA
+          console.log('CONSIDER IF TO SHOW THE INSTALL PROMPT - DO NOT SHOW IF JUST DECLINED...');
           showInstallPromotion();
           // Optionally, send analytics event that PWA install promo was shown.
           console.log("'beforeinstallprompt' event was fired.");
@@ -2264,21 +2334,37 @@ $( document ).ready(function() {
                // Wait for the user to respond to the prompt
                const { outcome } = await deferredPrompt.userChoice;
                // Optionally, send analytics event with outcome of user choice
-               console.log(`User response to the install prompt: ${outcome}`);
+               const userChoiceMsg = `User response to the install prompt: '${outcome}'`;
+               toastr["info"](userChoiceMsg);
+               console.log(userChoiceMsg);
+               if (outcome && outcome.outcome === "accepted") {
+                    console.log("User accepted install prompt.  Setting 'was_installed' cookie.");
+                    setCookie("was_installed", true);
+               }
                // We've used the prompt, and can't use it again, throw it away
                deferredPrompt = null;
           } else {
-               console.log();
+               // console.log();
                // } catch (installError){
                let installErrorMsg = "Unable to install - No `beforeinstallprompt` event so `deferredPrompt` NOT found!";
                toastr["error"](installErrorMsg);
           }
      });
 
+     // window.addEventListener("appinstalled", async function (e) {
+     //      installButton.style.display = "none";
+     // });
+
      /* Listen for a successful installation */
-     window.addEventListener("appinstalled", () => {
+     window.addEventListener("appinstalled", async function (e){
+          // window.addEventListener("appinstalled", () => {
+          /* If this event happened - the app is clearly installable AND is now installed */
+          setCookie("is_installable", true);
+          setCookie("was_installed", false);
+
           // Hide the app-provided install promotion
           hideInstallPromotion();
+          $(".installButton").remove();
           // Clear the deferredPrompt so it can be garbage collected
           deferredPrompt = null;
           // Optionally, send analytics event to indicate successful install
@@ -2319,7 +2405,7 @@ $( document ).ready(function() {
                displayMode = "standalone";
           }
           // Log display mode change to analytics
-          console.log("DISPLAY_MODE_CHANGED", displayMode);
+          console.log("DISPLAY_MODE_CHANGED - Perhaps installed?", displayMode);
           updateDisplayMode(displayMode);
      });
 
