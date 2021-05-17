@@ -3,7 +3,7 @@
      "short_name": "חופי תל אביב",
      "description": "United Hatzalah First Responder Guide to Tel Aviv Beaches",
      "theme_color": "#ff7200",
-     "background_color": "#fff",
+     "background_color": "#ffffff",
      "display": "standalone",
      "orientation": "portrait",
      "start_url": "/telaviv_beaches/",

@@ -1986,58 +1986,88 @@ function hideInstallPromotion(params) {
 function updateDisplayMode(displayMode) {
      /* Handle cases where the app is already installed */
      displayMode = displayMode || getPWADisplayMode();
-     console.log("displayMode:", displayMode);
+     console.log("updateDisplayMode() w/displayMode:", displayMode);
+     console.log("getCookie('is_installed')", getCookie("is_installed"));
 
      switch (displayMode) {
           case "twa":
           case "standalone":
                console.log("Already installed! Setting cookies and removing installButton");
-               setCookie("was_installed", true);
+               setCookie("is_installed", true);
                setCookie("pwa_window", true);
-               $(".installButton").remove();
+               console.log("Setting cookies: pwa_window = true & is_installed = true");
+               $(".installButton").hide();
                break;
           case "browser":
                setCookie("pwa_window", false);
+               console.log("Setting cookies: pwa_window = false");
                if (!getCookie("is_installable")) {
                     console.log("Uninstallable!  Removing installButton");
-                    $(".installButton").remove();
-               } else {
-                    $(".installButton").show();
-                    console.log("showing installButton");
+                    $(".installButton").hide();
                }
+               if (getCookie("is_installed") == true) {
+                    console.log("App appears to be installed in another window!  Removing installButton");
+                    $(".installButton").hide();
+               } else {
+                    console.log("App is not installed. Displaying installButton");
+                    $(".installButton").show();
+               }
+
+          // else {
+               // $(".installButton").show();
+               // console.log("showing installButton");
+          // }
                break;
           default:
                console.log("default case");
                break;
      }
 
-     // pwa_window;
-     // was_installed;
-     // is_installable;
-     // is_ios;
+     // if (getCookie("was_installed")){
+     //      console.log("Cookie says app was already installed! Removing installButton");
+     //      $(".installButton").hide();
+     // }
+
+
+     /* Detect via browser */
+     checkAppInstalled();
 
      /* Show the Displaymode in header */
      // console.log("Updating display values...");
      $("#displayMode").text(displayMode);
      $("#pwa_window").text(getCookie("pwa_window"));
      $("#was_installed").text(getCookie("was_installed"));
+     $("#is_installed").text(getCookie("is_installed"));
      $("#is_installable").text(getCookie("is_installable"));
      // $("#app_detected").text(checkAppInstalled());
      $("#is_ios").text(isIos().platform);
-
-     return;
 }
+
+// function isIos() {
+//      const isIos = ['iPhone', 'iPad', 'iPod'].includes(navigator.platform);
+//      const platform = navigator.platform;
+//      const toReturn = { isIos, platform };
+//      console.log("isIos() returning:",toReturn);
+//      // alert(JSON.stringify(toReturn));
+//      // toastr["info"](JSON.stringify(toReturn));
+//      return toReturn;
+// }
 
 function isIos() {
-     const isIos = ['iPhone', 'iPad', 'iPod'].includes(navigator.platform);
      const platform = navigator.platform;
+     let isIos;
+     if (["iPad Simulator", "iPhone Simulator", "iPod Simulator", "iPad", "iPhone", "iPod"].includes(platform)) {
+          isIos = true;
+     }
+     // iPad on iOS 13
+     else if (navigator.userAgent.includes("Mac") && "ontouchend" in document) {
+          isIos = true;
+     } else {
+          isIos = false;
+     }
      const toReturn = { isIos, platform };
-     console.log("isIos() returning:",toReturn);
-     // alert(JSON.stringify(toReturn));
-     // toastr["info"](JSON.stringify(toReturn));
      return toReturn;
 }
-
 
 async function checkAppInstalled (){
 
@@ -2281,9 +2311,6 @@ $( document ).ready(function() {
           setCookie("was_installed", false);
      }
 
-     /* Detect via browser */
-     checkAppInstalled();
-
      // let app_detected = false;
      // if ('getInstalledRelatedApps' in window.navigator) {
      //      let relatedApps = await window.navigator.getInstalledRelatedApps();
@@ -2307,9 +2334,13 @@ $( document ).ready(function() {
      /* Wait to see if user/browser meets installation requirements */
      /* Supress the browser default behaviour so we can customize the outcome */
      window.addEventListener("beforeinstallprompt", function(e) {
+          console.log("'beforeinstallprompt' event was fired.");
           /* If this event happened - the app is clearly installable AND not currently installed */
           setCookie("is_installable", true);
-          setCookie("was_installed", false);
+          setCookie("is_installed", false);
+          console.log("Setting cookies: is_installable = true & is_installed = false");
+          updateDisplayMode();
+          // $(".installButton").hide();
 
           // Prevent the mini-infobar from appearing on mobile
           e.preventDefault();
@@ -2319,7 +2350,6 @@ $( document ).ready(function() {
           console.log('CONSIDER IF TO SHOW THE INSTALL PROMPT - DO NOT SHOW IF JUST DECLINED...');
           showInstallPromotion();
           // Optionally, send analytics event that PWA install promo was shown.
-          console.log("'beforeinstallprompt' event was fired.");
      });
 
      /* Handle the installation approval/request from user */
@@ -2339,8 +2369,18 @@ $( document ).ready(function() {
                console.log(userChoiceMsg);
                if (outcome && outcome.outcome === "accepted") {
                     console.log("User accepted install prompt.  Setting 'was_installed' cookie.");
+                    setCookie("is_installable", true);
                     setCookie("was_installed", true);
+                    setCookie("is_installed", true);
+                    console.log("Setting cookies: is_installed, is_installable, was_installed = true");
+               } else if (outcome && outcome.outcome === "dismissed") {
+                    console.log("User declined install prompt.");
+                    setCookie("is_installable", true);
+                    // setCookie("was_installed", true);
+                    setCookie("is_installed", false);
+                    console.log("Setting cookies: is_installable = true & is_installed = false");
                }
+               updateDisplayMode();
                // We've used the prompt, and can't use it again, throw it away
                deferredPrompt = null;
           } else {
@@ -2360,11 +2400,14 @@ $( document ).ready(function() {
           // window.addEventListener("appinstalled", () => {
           /* If this event happened - the app is clearly installable AND is now installed */
           setCookie("is_installable", true);
-          setCookie("was_installed", false);
+          setCookie("was_installed", true);
+          setCookie("is_installed", true);
+          console.log("Setting cookies: is_installed, is_installable, was_installed = true");
+          updateDisplayMode();
 
           // Hide the app-provided install promotion
           hideInstallPromotion();
-          $(".installButton").remove();
+          $(".installButton").hide();
           // Clear the deferredPrompt so it can be garbage collected
           deferredPrompt = null;
           // Optionally, send analytics event to indicate successful install
