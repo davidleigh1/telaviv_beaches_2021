@@ -91,6 +91,7 @@
 						}
 				</style>
                     <link rel="stylesheet" href="css/main.css">
+                    <link rel="stylesheet" href="css/install-prompt.css">
 
 		</head>
 		<body>
@@ -112,7 +113,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a href="index.html"><img class="uh-logo" height="42px" width="60px" src="img/uh_logo_49x42.png"></a>
+					<a onclick="showInstallPrompt('clickedLogo');return false;" href="index.html"><img class="uh-logo" height="42px" width="60px" src="img/uh_logo_49x42.png"></a>
 					<a class="navbar-brand hidden-xs hidden-sm" href="#"><span style="font-size:50%;" class="text-muted"></span> איחוד הצלה מחוז מרכז - חופי תל אביב</a>
 					<a class="navbar-brand visible-xs visible-sm" href="#"><span style="font-size:30%;" class="text-muted"></span> חופי תל אביב</a>
 				</div>
@@ -131,19 +132,20 @@
                               <span class="he"><i class="fa fa-file-text"></i> טופס תיעוד</span>
                          </button>
 
-                         <button type="button" class="btn installButton closeOnClick">
+                         <button type="button" class="btn installButton closeOnClick toggle-hide">
                               <span class="en"><i class="fa fa-download"></i> Install App</span>
                               <span class="he"><i class="fa fa-download"></i> התקן אפליקציה</span>
                          </button>
 
                          <div class="btn" style="display:inline-block;color:white;border: 1px white solid;white-space: initial;">
+                              iOS: <span id="is_ios" style="font-family: monospace;background-color: dimgray;padding: 2px 5px;">---</span>&nbsp;| 
                               Mode: <span id="displayMode" style="font-family: monospace;background-color: dimgray;padding: 2px 5px;">---</span>&nbsp;| 
-                              Is PWA: <span id="pwa_window" style="font-family: monospace;background-color: dimgray;padding: 2px 5px;">---</span>&nbsp;| 
+                              PWA Win: <span id="pwa_window" style="font-family: monospace;background-color: dimgray;padding: 2px 5px;">---</span>&nbsp;| 
                               Is Installed: <span id="is_installed" style="font-family: monospace;background-color: dimgray;padding: 2px 5px;">---</span>&nbsp;| 
-                              Was Installed: <span id="was_installed" style="font-family: monospace;background-color: dimgray;padding: 2px 5px;">---</span>&nbsp;| 
+                              Was Installed: <span id="has_beenInstalled" style="font-family: monospace;background-color: dimgray;padding: 2px 5px;">---</span>&nbsp;| 
                               Auto-Installable: <span id="is_installable" style="font-family: monospace;background-color: dimgray;padding: 2px 5px;">---</span>&nbsp;| 
                               App Detected: <span id="app_detected" style="font-family: monospace;background-color: dimgray;padding: 2px 5px;">---</span>&nbsp;| 
-                              Device: <span id="is_ios" style="font-family: monospace;background-color: dimgray;padding: 2px 5px;">---</span>
+                              Device: <span id="platform" style="font-family: monospace;background-color: dimgray;padding: 2px 5px;">---</span>
                          </div>
 
 
@@ -310,6 +312,63 @@
                </div>
           </div>
 
+          <!-- Install Prompt -->
+          <!-- <div class='install-modal' id='install-modal-2'> -->
+               <!-- <div class='install-modal-content'> -->
+                    <!-- For the close button -->
+                    <!-- <span class="install-modal-close" id='install-modal-close'>&times;</span> -->
+               <!-- </div> -->
+          <!-- </div> -->
+
+          <div class="modal fade" id="install-modal" tabindex="-1">
+               <!-- <div class="modal-dialog"> -->
+                    <!-- <div class="modal-content"> -->
+                         <!-- <div class="modal-header">
+                              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                              <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                         </div> -->
+                         <div class="modal-body">
+                              <div class="modal-body-wrapper">
+                                   <div class="en" hidden="hidden">
+                                        <button type="button" class="close en pull-right pointer" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <!-- <h4><i class="fa fa-download"></i> Install TLV Beaches?</h4> -->
+                                        <h4 class="install-prompt-header"><img class="inline-icon beaches_app_icon" src="img/icons/apple-touch-icon-57x57-precomposed.png"> Install TLV Beaches?</h4>
+                                        <p class="install-prompt-message">Install on your home screen for quick and easy access</p>
+                                        <p class="ios-add-to-home-screen toggle-hide">
+                                             Tap <img class="inline-icon icon-ios_share" src="img/icons/ios_navigation_action.png"> then <img class="inline-icon icon-ios_add_to_home_screen" src="img/icons/ios_add_to_home_screen_2.png"> '<b>Add to Home Screen</b>'
+                                        </p>
+                                        <p class="installable-install-app toggle-show">
+                                             <button type="button" class="btn promptInstallButton">
+                                                  <span class="en"><i class="fa fa-download"></i> Install App</span>
+                                             </button>
+                                        </p>
+                                   </div>
+                                   <div class="he" hidden="hidden">
+                                        <button type="button" class="close he pull-right pointer" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="install-prompt-header"><img class="inline-icon beaches_app_icon" src="img/icons/apple-touch-icon-57x57-precomposed.png"> להתקין חופי תל אביב?</h4>
+                                        <p class="install-prompt-message">התקן במסך הבית שלך לגישה מהירה וקלה</p>
+                                        <p class="ios-add-to-home-screen toggle-hide">
+                                             הקש על <img class="inline-icon icon-ios_share" src="img/icons/ios_navigation_action.png"> ואז על <img class="inline-icon icon-ios_add_to_home_screen" src="img/icons/ios_add_to_home_screen_2.png">  'הוסף למסך הבית'
+                                        </p>
+                                        <p class="installable-install-app toggle-show">
+                                             <button type="button" class="btn promptInstallButton">
+                                                  <span class="he"><i class="fa fa-download"></i> התקן אפליקציה</span>
+                                             </button>
+                                        </p>
+                                   </div>
+                              </div>
+                         </div>
+                         <!-- <div class="modal-footer">
+                              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                         </div> -->
+                    <!-- </div> -->
+               <!-- </div> -->
+          </div>
+
+
+
+
+
 		<footer>
 			<div class="container-fluid">
 				<div class="row en">Credit &amp; thanks to <b>Lior Fadida</b>, Ichud Hatzalah, Tirat HaCarmel for the original idea</div>
@@ -328,11 +387,15 @@
 
 		<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
 
-		<script src="js/vendor/bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/vendor/bootstrap.min.js"></script>
 
-          <script src="js/vendor/toastr.min.js"></script>
+          <script type="text/javascript" src="js/vendor/toastr.min.js"></script>
 
-		<script src="js/main.js"></script>
+          <!-- https://github.com/tariq86/mobile-bookmark-bubble -->
+          <!-- <script type="text/javascript" src="js/vendor/bookmark_bubble.js"></script> -->
+          <!-- <script type="text/javascript" src="js/vendor/bookmark_bubble-min.js"></script> -->
+
+		<script type="text/javascript" src="js/main.js"></script>
 
           <!-- <script src="js/serviceWorker.js" type="application/javascript"></script> -->
 

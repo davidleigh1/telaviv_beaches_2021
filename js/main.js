@@ -1,6 +1,7 @@
-tlv_vars = {
-	"version": "120421-3.0",
-	"isMobile": undefined,
+tlv_config = {
+	"version": "290521-4.0",
+	"is_mobile": undefined,
+     "queryVars": {},
 	"feedbackTel": "+972544584417",
 	"feedbackEmail": "davidleigh1@gmail.com",
 	"feedbackDefaultMsg": "Feedback on TLV place",
@@ -1469,17 +1470,17 @@ simpleSearch = function() {
     }
 }
 
-isMobile = function () {
-	//console.log("isMobile()");
-	tlv_vars.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-	return tlv_vars.isMobile;
+is_mobile = function () {
+	//console.log("is_mobile()");
+	tlv_config.is_mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+	return tlv_config.is_mobile;
 };
 
 getIconFilename = function (iconName) {
 	//console.log("getIconFilename()",iconName);
 	switch( iconName ) {
 		case 'navigateToIcon':
-			if ( tlv_vars.isMobile == true ){
+			if ( tlv_config.is_mobile == true ){
 				return "waze2.png";
 			} else {
 				return "google-maps_48_trans.png";
@@ -1493,7 +1494,7 @@ getIconFilename = function (iconName) {
 navigateTo = function (lat, lon, getIcon) {
 	//console.log("navigateTo()",lat, lon);
     // Mobile devices - open Waze
-    if ( tlv_vars.isMobile === true ) {
+    if ( tlv_config.is_mobile === true ) {
         var wazeURL = "waze://?ll=" + lat + "," + lon + "&navigate=yes";
         if (navigator.userAgent.match(/Android/i)) {
             document.location = wazeURL;
@@ -1666,23 +1667,23 @@ function buildAddressLink(thisPlaceObj, placeAttribute, lang = "en", iconHTML, U
 
 buildFeedbackLink = function (thisPlaceObj, en_name, he_name) {
 	var returnString = "";
-	var subjectForEmail_en = ( tlv_vars.feedbackDefaultMsg + " '" + en_name + "' (" + tlv_vars.version + ")" ).replace(/ /g,"%20");
-	var subjectForEmail_he = ( tlv_vars.he.feedbackDefaultMsg + " '" + he_name + "' (" + tlv_vars.version + ")" ).replace(/ /g,"%20");
-	var subjectForWhatsapp_en = ( tlv_vars.feedbackDefaultMsg + " '" + en_name + "' (" + tlv_vars.version + "): " ).replace(/["]/g,"-");
-	var subjectForWhatsapp_he = ( tlv_vars.he.feedbackDefaultMsg + " '" + he_name + "' (" + tlv_vars.version + "): " ).replace(/["]/g,"-");
+	var subjectForEmail_en = ( tlv_config.feedbackDefaultMsg + " '" + en_name + "' (" + tlv_config.version + ")" ).replace(/ /g,"%20");
+	var subjectForEmail_he = ( tlv_config.he.feedbackDefaultMsg + " '" + he_name + "' (" + tlv_config.version + ")" ).replace(/ /g,"%20");
+	var subjectForWhatsapp_en = ( tlv_config.feedbackDefaultMsg + " '" + en_name + "' (" + tlv_config.version + "): " ).replace(/["]/g,"-");
+	var subjectForWhatsapp_he = ( tlv_config.he.feedbackDefaultMsg + " '" + he_name + "' (" + tlv_config.version + "): " ).replace(/["]/g,"-");
 
 
 	
 	returnString += '<span class="info-feedback">' +
 	// subject=look at this website&body=Hi,I found this website and thought you might like it http://www.geocities.com/wowhtml/
-		'<a class="en nolink" href="mailto:'+ tlv_vars.feedbackEmail + '?subject='+ encodeURIComponent(subjectForEmail_en) + '"><i class="fa fa-fw fa-envelope"></i></a>' +
-		'<a class="he nolink" href="mailto:'+ tlv_vars.feedbackEmail + '?subject='+ encodeURIComponent(subjectForEmail_he) + '"><i class="fa fa-fw fa-envelope"></i></a>' +
+		'<a class="en nolink" href="mailto:'+ tlv_config.feedbackEmail + '?subject='+ encodeURIComponent(subjectForEmail_en) + '"><i class="fa fa-fw fa-envelope"></i></a>' +
+		'<a class="he nolink" href="mailto:'+ tlv_config.feedbackEmail + '?subject='+ encodeURIComponent(subjectForEmail_he) + '"><i class="fa fa-fw fa-envelope"></i></a>' +
 		'';
 
-	if ( tlv_vars.isMobile === true ) {
+	if ( tlv_config.is_mobile === true ) {
 		returnString += '' +
-			'<a class="en nolink" href="whatsapp://send?phone='+ tlv_vars.feedbackTel + '&text='+ subjectForWhatsapp_en +'"><i class="fa fa-fw fa-whatsapp"></i>' +
-			'<a class="he nolink" href="whatsapp://send?phone='+ tlv_vars.feedbackTel + '&text='+ subjectForWhatsapp_he +'"><i class="fa fa-fw fa-whatsapp"></i>' +
+			'<a class="en nolink" href="whatsapp://send?phone='+ tlv_config.feedbackTel + '&text='+ subjectForWhatsapp_en +'"><i class="fa fa-fw fa-whatsapp"></i>' +
+			'<a class="he nolink" href="whatsapp://send?phone='+ tlv_config.feedbackTel + '&text='+ subjectForWhatsapp_he +'"><i class="fa fa-fw fa-whatsapp"></i>' +
 			'';
 	}
 
@@ -1959,27 +1960,99 @@ function onclickmap(thisElem) {
 /* Detect how the app was launched */
 function getPWADisplayMode() {
      console.log("getPWADisplayMode()");
-     const isStandalone = window.matchMedia("(display-mode: standalone)").matches;
+
+     const isStandaloneCss = window.matchMedia("(display-mode: standalone)").matches;
+     const isStandaloneNavigator = navigator.standalone ? true : false;
+
+     console.log("Comparing standalone detection:", isStandaloneCss, isStandaloneNavigator);
+
+     tlv_config.is_currentlyInStandaloneMode = (isStandaloneCss || isStandaloneNavigator) ? true : false;
+     setCookie("is_currentlyInStandaloneMode", tlv_config.is_currentlyInStandaloneMode);
+
      if (document.referrer.startsWith("android-app://")) {
+          tlv_config.displayMode = "twa";
+          setCookie("displayMode", "twa");
           return "twa";
-     } else if (navigator.standalone || isStandalone) {
+     } else if (isStandaloneNavigator || isStandaloneCss) {
+          tlv_config.displayMode = "standalone";
+          setCookie("displayMode", "standalone");
           return "standalone";
      }
+     tlv_config.displayMode = "browser";
+     setCookie("displayMode", "browser");
      return "browser";
 }
 
 /* Show a pop-up/promotion begging to install the app */
-function showInstallPromotion(params) {
-     const installMessage = "Install me please!";
+function showInstallPromotion(ios_or_android = "android") {
+     const installMessage = "Install me please (" + ios_or_android + ")!";
      console.log(installMessage);
-     toastr["warning"](installMessage);
+     // toastr["warning"](installMessage);
+
+     if (ios_or_android=="ios"){
+          var bubble = new google.bookmarkbubble.Bubble();
+          var parameter = "popup_bubble";
+          bubble.hasHashParameter = function () {
+               return window.localStorage[parameter];
+          };
+          bubble.setHashParameter = function () {
+               if (!this.hasHashParameter()) {
+                    window.localStorage[parameter] = 1;
+               }
+          };
+          console.log("Showing iOS bubble...");
+          // bubble.showIfAllowed();
+          bubble.show();
+     } else {
+          // const buttonCode = '<button type="button" class="btn installButton closeOnClick"><span class="en"><i class="fa fa-download"></i> Install App</span><span class="he"><i class="fa fa-download"></i> התקן אפליקציה</span></button>';
+          const buttonCode = '<button type="button" class="btn installButton closeOnClick" onclick="deferredPrompt.prompt();"><span class="en"><i class="fa fa-download"></i> Install App</span></button>';
+          const installBannerMsg = "PLEASE INSTALL ME!   " + buttonCode;
+          toastr["success"](installBannerMsg);
+     }
 }
 
 /* Hide a pop-up/promotion begging to install the app */
-function hideInstallPromotion(params) {
-     const hideInstallMessage = "Hiding installation...";
+function hideInstallPrompt(params) {
+     // See also showInstallPrompt();
+     const hideInstallMessage = "Hiding installation prompt...";
      console.log(hideInstallMessage);
+     $("#install-modal").modal("hide");
      toastr["info"](hideInstallMessage);
+}
+
+function toggleInstallButton(showOrHideBoolean) {
+     console.log("toggleInstallButton()", showOrHideBoolean);
+     if (showOrHideBoolean && showOrHideBoolean === true){
+          $(".installButton").show();
+          return true;
+     }
+
+     if (showOrHideBoolean && showOrHideBoolean === false) {
+          $(".installButton").hide();
+          return false;
+     }
+
+     if (getCookie("is_installed") == true) {
+          console.log("App appears to be installed!  Removing installButton");
+          $(".installButton").hide();
+          return false;
+     }
+
+     if (getCookie("is_currentlyInStandaloneMode") == true){
+          console.log("App appears to be running in a Standalone or PWA-type window!  Removing installButton");
+          $(".installButton").hide();
+          return false;
+     }
+
+     if (getCookie("is_installable") != true) {
+          console.log("Apps are NOT installable!  Removing installButton");
+          $(".installButton").hide();
+          return false;
+     }
+
+     console.log("App does not appear to be installed... Displaying installButton");
+     $(".installButton").show();
+     return true;
 }
 
 /* Handle and update UI based on DisplayMode */
@@ -1987,74 +2060,120 @@ function updateDisplayMode(displayMode) {
      /* Handle cases where the app is already installed */
      displayMode = displayMode || getPWADisplayMode();
      console.log("updateDisplayMode() w/displayMode:", displayMode);
-     console.log("getCookie('is_installed')", getCookie("is_installed"));
 
-     switch (displayMode) {
-          case "twa":
-          case "standalone":
-               console.log("Already installed! Setting cookies and removing installButton");
-               setCookie("is_installed", true);
-               setCookie("pwa_window", true);
-               console.log("Setting cookies: pwa_window = true & is_installed = true");
-               $(".installButton").hide();
-               break;
-          case "browser":
-               setCookie("pwa_window", false);
-               console.log("Setting cookies: pwa_window = false");
-               if (!getCookie("is_installable")) {
-                    console.log("Uninstallable!  Removing installButton");
-                    $(".installButton").hide();
-               }
-               if (getCookie("is_installed") == true) {
-                    console.log("App appears to be installed in another window!  Removing installButton");
-                    $(".installButton").hide();
-               } else {
-                    console.log("App is not installed. Displaying installButton");
-                    $(".installButton").show();
-               }
+     console.log("\n\n\nTHIS FUNCTION SHOULD BE DEPRECATED!!!\n\n\n");
 
-          // else {
-               // $(".installButton").show();
-               // console.log("showing installButton");
-          // }
-               break;
-          default:
-               console.log("default case");
-               break;
-     }
 
-     // if (getCookie("was_installed")){
+
+     // console.log("getCookie('is_installed')", getCookie("is_installed"));
+
+     // switch (displayMode) {
+     //      case "twa":
+     //      case "standalone":
+     //           console.log("Already installed! Setting cookies and removing installButton");
+     //           setCookie("is_installed", true);
+     //           setCookie("pwa_window", true);
+     //           console.log("Setting cookies: pwa_window = true & is_installed = true");
+     //           // $(".installButton").hide();
+     //           break;
+     //      case "browser":
+     //           setCookie("pwa_window", false);
+     //           console.log("Setting cookies: pwa_window = false");
+     //           if (!getCookie("is_installable")) {
+     //                console.log("Uninstallable!  Removing installButton");
+     //                // $(".installButton").hide();
+     //           }
+     //           if (getCookie("is_installed") == true) {
+     //                console.log("App appears to be installed in another window!  Removing installButton");
+     //                // $(".installButton").hide();
+     //           } else {
+     //                console.log("App is not installed. Displaying installButton");
+     //                // $(".installButton").show();
+     //           }
+
+     //      // else {
+     //           // $(".installButton").show();
+     //           // console.log("showing installButton");
+     //      // }
+     //           break;
+     //      default:
+     //           console.log("default case");
+     //           break;
+     // }
+
+     // if (getCookie("has_beenInstalled")){
      //      console.log("Cookie says app was already installed! Removing installButton");
      //      $(".installButton").hide();
      // }
 
 
+     // $.when(checkAppInstalled()).then(
+     //      function (status) {
+     //           console.log(status + ", things are going well");
+     //      },
+     //      function (status) {
+     //           console.log(status + ", you fail this time");
+     //      },
+     //      function (status) {
+     //           console.log(status + ", Done!!");
+     //      }
+     // );
+
+     // checkAppInstalled
+     //      .promise()
+     //      .done(() => {
+     //           $("#app_detected").text("The end...");
+     //      });
+
+     // $.when(checkAppInstalled()).done(function (result) {
+     //      $("#app_detected").text(result);
+     //      console.log(result);
+     // });
+
+     // MovieLibrary.getGenres = function () {
+     //      var promise = new Promise(function (resolve, reject) {
+     //           /* missing implementation */
+     //           resolve(result);
+     //      });
+
+     //      return promise;
+     // };
+
+
+
+
+
+
      /* Detect via browser */
-     checkAppInstalled();
+     //  checkAppInstalled();
 
      /* Show the Displaymode in header */
      // console.log("Updating display values...");
      $("#displayMode").text(displayMode);
-     $("#pwa_window").text(getCookie("pwa_window"));
-     $("#was_installed").text(getCookie("was_installed"));
+     $("#is_ios").text(getCookie("is_ios"));
+     console.log("is_ios", $("#is_ios").text(), getCookie("is_ios"));
+     $("#pwa_window").text(getCookie("is_currentlyInStandaloneMode"));
+     $("#has_beenInstalled").text(getCookie("has_beenInstalled"));
      $("#is_installed").text(getCookie("is_installed"));
      $("#is_installable").text(getCookie("is_installable"));
-     // $("#app_detected").text(checkAppInstalled());
-     $("#is_ios").text(isIos().platform);
+     $("#platform").text(isIos("platform"));
+
+     checkAppInstalled().then(function (result) {
+          $("#app_detected").text(result);
+          console.log(result);
+     });
 }
 
-// function isIos() {
-//      const isIos = ['iPhone', 'iPad', 'iPod'].includes(navigator.platform);
-//      const platform = navigator.platform;
-//      const toReturn = { isIos, platform };
-//      console.log("isIos() returning:",toReturn);
-//      // alert(JSON.stringify(toReturn));
-//      // toastr["info"](JSON.stringify(toReturn));
-//      return toReturn;
-// }
-
-function isIos() {
-     const platform = navigator.platform;
+function isIos(ios_or_platform = "ios") {
+     // const platform = navigator.platform;
+     // tlv_config.is_ios = ["iPhone", "iPad", "iPod"].includes(navigator.platform) ? true : false;
+     const platform = navigator.userAgent;
+     const appVersion = navigator.appVersion;
+     const appName = navigator.appName;
+     const vendor = navigator.vendor;
+     // const uaData = JSON.stringify(navigator.userAgentData.brands).replace(/"/g, "");
+     // const userAgentData;
+     const full = platform + " | " + appVersion + " | " + appName + " | " + vendor;
      let isIos;
      if (["iPad Simulator", "iPhone Simulator", "iPod Simulator", "iPad", "iPhone", "iPod"].includes(platform)) {
           isIos = true;
@@ -2065,14 +2184,15 @@ function isIos() {
      } else {
           isIos = false;
      }
-     const toReturn = { isIos, platform };
-     return toReturn;
+     // setCookie("is_ios", isIos);
+     console.log("isIos() isIos:", isIos, " / platform: ", platform);
+     // console.log(toReturn);
+     return ios_or_platform.toLowerCase() == "platform" ? full : isIos;
+     // const toReturn = { isIos, platform };
+     // return toReturn;
 }
 
 async function checkAppInstalled (){
-
-     // emma = "awake";
-     // console.log(emma != "asleep");
 
      let app_detected = false;
      if ('getInstalledRelatedApps' in window.navigator) {
@@ -2080,16 +2200,19 @@ async function checkAppInstalled (){
           // const { relatedApps } = await window.navigator.getInstalledRelatedApps()
           if (relatedApps.length > 0){
                app_detected = true;
+               tlv_config.has_relatedAppsDetected = relatedApps;
           }
           else {
                app_detected = false;
+               tlv_config.has_relatedAppsDetected = app_detected;
           }
-          console.log("app_detected: ", app_detected, relatedApps);
-          // return app_detected;
+          console.log("Related Apps Detected: ", app_detected, relatedApps);
+          return app_detected;
      } else {
           console.log('getInstalledRelatedApps unavailable for app_detected!');
+          return "unavailable";
      }
-     $("#app_detected").text(app_detected);
+     // $("#app_detected").text(app_detected);
      // return relatedApps;
 }
 
@@ -2097,7 +2220,8 @@ async function checkAppInstalled (){
 $( document ).ready(function() {
      // console.log('ONREADY');
 
-     tlv_vars.isMobile = isMobile();
+     /* Check for mobile - we use this to determine if we will use Waze or Google Maps for navigation links */
+     tlv_config.is_mobile = is_mobile();
 
      /* DOM GENERATION */
      var textToAppend = createTableFromData(tlv_data);
@@ -2122,13 +2246,13 @@ $( document ).ready(function() {
           };
      }
      /* Get the URL query variables... */
-     var queryVars = Object.fromEntries([...new URLSearchParams(location.search)]);
-     // console.log("queryVars:", queryVars);
+     tlv_config.queryVars = Object.fromEntries([...new URLSearchParams(location.search)]);
+     // console.log("tlv_config.queryVars:", tlv_config.queryVars);
 
      // /* Set language on load */
      // /* lang value taken in the following order: URL > Cookie > Default    */
-     if (["en", "he"].includes(queryVars.lang)) {
-          updateLang(queryVars.lang);
+     if (["en", "he"].includes(tlv_config.queryVars.lang)) {
+          updateLang(tlv_config.queryVars.lang);
      } else if (["en", "he"].includes(getCookie("lang"))) {
           updateLang(getCookie("lang"));
      } else if (!$("html").attr("lang")) {
@@ -2254,23 +2378,23 @@ $( document ).ready(function() {
 
      /* Handle any ?goto= parameters on incoming URL */
 
-     if (!!queryVars.goto) {
-          // console.log("queryVars.goto found!", queryVars.goto);
-          $('[data-target="#' + queryVars.goto + '"]').trigger("click");
+     if (!!tlv_config.queryVars.goto) {
+          // console.log("tlv_config.queryVars.goto found!", tlv_config.queryVars.goto);
+          $('[data-target="#' + tlv_config.queryVars.goto + '"]').trigger("click");
      } else {
-          // console.log("queryVars.goto NOT found!", queryVars);
+          // console.log("tlv_config.queryVars.goto NOT found!", tlv_config.queryVars);
      }
 
      /* Show/hide filter on load */
 
      /* show_filter value taken in the following order: URL > Cookie > Default */
-     if (["true", "false"].includes(queryVars.show_filter)) {
-          // console.log("queryVars.show_filter found!", queryVars.show_filter);
-          showFilterbar(stringToBooleanOrBoolean(queryVars.show_filter));
+     if (["true", "false"].includes(tlv_config.queryVars.show_filter)) {
+          // console.log("tlv_config.queryVars.show_filter found!", tlv_config.queryVars.show_filter);
+          showFilterbar(stringToBooleanOrBoolean(tlv_config.queryVars.show_filter));
      } else if ([true, false].includes(getCookie("show_filter"))) {
           showFilterbar(getCookie("show_filter"));
      } else {
-          // console.log("URL 'queryVars.show_filter' NOT found and no 'show_filter' cookie was found!");
+          // console.log("URL 'tlv_config.queryVars.show_filter' NOT found and no 'show_filter' cookie was found!");
      }
 
      /* Toastr Notifications */
@@ -2297,19 +2421,73 @@ $( document ).ready(function() {
      /* Custom Install mechanism */
      /* Credit: https://web.dev/customize-install/ */
      /* Credit: https://javascript.plainenglish.io/creating-a-browser-agnostic-pwa-install-button-41039f312fbe  */
+     /* We will define the following attributes:
+          is_ios
+          is_installable
+          has_sufficientTimePast ------- TO BE ADDED
+          lastSawPrompt ---------------- TO BE ADDED
+          is_currentlyInStandaloneMode
+          supportsManifest
+          has_beenInstalled
+     */
+
+     // Initialize deferredPrompt for use later to show browser install prompt.
+     let deferredPrompt;
+
+     // First, check if user is on iOS
+     // tlv_config.is_ios = ["iPhone", "iPad", "iPod"].includes(navigator.platform) ? true : false;
+     tlv_config.is_ios = isIos() ? true : false;
+     setCookie("is_ios", tlv_config.is_ios);
+
+     // Check if user is on Chrome on iOS
+     // We need this as clicking *Share* on iOS Chrome doesn't give the option to 'add-to-homescreen' so we need to modify instructions
+     tlv_config.is_ios_chrome = /CriOS/i.test(navigator.userAgent);
+     setCookie("is_ios_chrome", tlv_config.is_ios_chrome);
+
+     // Check to see when the user last saw the modal
+     // tlv_config.has_sufficientTimePast = checkCookie("lastSawPrompt") > "14 days" ? true : false;
+     tlv_config.has_sufficientTimePast = true;
+
+     // Check users if they have already launched from the homepage app
+     // There are two cases we need to handle: users with newer iOS versions and legacy users...
+     // Newer versions: window.navigator.standalone returns a boolean. It will be undefined on older versions of Safari, which will resolve to a falsy value.
+     // tlv_config.is_currentlyInStandaloneMode = navigator.standalone ? true : false;
+     // setCookie("is_currentlyInStandaloneMode", tlv_config.is_currentlyInStandaloneMode);
+     getPWADisplayMode();
+
+     // We will ASSUME that if the app is running in a PWA or Standalone window, then it is installed
+     // But first, we must check if the cookie already exists as it might be installed elsewhere but is being opened here in a browser...
+     if (!getCookie("is_installed") || getCookie("is_installed") == false) {
+          tlv_config.is_installed = setCookie("is_installed") || getCookie("is_currentlyInStandaloneMode");
+          setCookie("is_installed", tlv_config.is_installed);
+     }
+
+     // Handle the case where our phone does not support standalone apps
+     // We can detect this by adding a 'standalone' query string in the manifest which would only be present if the manifest was used ;)
+     // Remember to keep this after the Object.fromEntries polyfill
+     tlv_config.supportsManifest = Object.fromEntries([...new URLSearchParams(location.search)]).standalone === "true" ? true : false;
+     setCookie("supportsManifest", tlv_config.supportsManifest);
 
      /* Let's establish if we CAN even install ourselves as a PWA */
-     let is_installable = true;
+     tlv_config.is_installable = true;
      if (!("serviceWorker" in navigator)) {
-          is_installable = false;
+          tlv_config.is_installable = false;
      }
-     setCookie("is_installable", is_installable);
+     setCookie("is_installable", tlv_config.is_installable);
 
      /* Check and set cookies if we can detect our own cookie showing PWA is installed */
-     if (!getCookie("was_installed")){
-          console.log('getCookie("was_installed") not found - setting to "false"');
-          setCookie("was_installed", false);
+     if (!getCookie("has_beenInstalled")) {
+          tlv_config.has_beenInstalled = false;
+          console.log('getCookie("has_beenInstalled") not found - setting to "false"');
+          setCookie("has_beenInstalled", false);
+     } else {
+          tlv_config.has_beenInstalled = getCookie("has_beenInstalled");
+          console.log('getCookie("has_beenInstalled") found!  Current value: ', getCookie("has_beenInstalled"));
+          // setCookie("has_beenInstalled", true);
      }
+
+     /* Detect is App is Installed via Browser App List - Async*/
+     checkAppInstalled();
 
      // let app_detected = false;
      // if ('getInstalledRelatedApps' in window.navigator) {
@@ -2328,37 +2506,50 @@ $( document ).ready(function() {
 
      // let is_ios = isIos();
 
-     // Initialize deferredPrompt for use later to show browser install prompt.
-     let deferredPrompt;
-
      /* Wait to see if user/browser meets installation requirements */
      /* Supress the browser default behaviour so we can customize the outcome */
-     window.addEventListener("beforeinstallprompt", function(e) {
-          console.log("'beforeinstallprompt' event was fired.");
-          /* If this event happened - the app is clearly installable AND not currently installed */
+     window.addEventListener("beforeinstallprompt", function (e) {
+          console.log("'beforeinstallprompt' event was fired!!!!!!!!!!!!!!");
+
+          /* If this event is triggered then the app is clearly installable AND not currently installed */
+          tlv_config.is_installable = true;
           setCookie("is_installable", true);
+          tlv_config.is_installed = false;
           setCookie("is_installed", false);
           console.log("Setting cookies: is_installable = true & is_installed = false");
-          updateDisplayMode();
+          console.log("TODO - do we need to restore the following updateDisplayMode()?");
+
+          // updateDisplayMode();
           // $(".installButton").hide();
 
           // Prevent the mini-infobar from appearing on mobile
           e.preventDefault();
           // Stash the event so it can be triggered later.
           deferredPrompt = e;
+
           // Update UI notify the user they can install the PWA
-          console.log('CONSIDER IF TO SHOW THE INSTALL PROMPT - DO NOT SHOW IF JUST DECLINED...');
-          showInstallPromotion();
+          /*
+          console.log("CONSIDER IF TO SHOW THE INSTALL PROMPT - DO NOT SHOW IF JUST DECLINED...");
+          if (isIos() == true) {
+               showInstallPromotion("ios");
+               // toastr["info"]("An Apple device!");
+          } else {
+               showInstallPromotion("android");
+               // toastr["success"]("Not an iOS device!");
+          }
+          */
+
           // Optionally, send analytics event that PWA install promo was shown.
      });
 
      /* Handle the installation approval/request from user */
-     $(".installButton").on("click", async () => {
-     // buttonInstall.addEventListener("click", async () => {
+     $(".installButton, .installable-install-app").on("click", async () => {
+          console.log("EVENT - installButton clicked - outcome pending...");
+          // buttonInstall.addEventListener("click", async () => {
           if (!!deferredPrompt) {
-               console.log("deferredPrompt found!");
+               console.log("deferredPrompt found - we will hide our modal and trigger the system install prompt!");
                // Hide the app provided install promotion
-               hideInstallPromotion();
+               hideInstallPrompt();
                // Show the install prompt
                deferredPrompt.prompt();
                // Wait for the user to respond to the prompt
@@ -2367,20 +2558,23 @@ $( document ).ready(function() {
                const userChoiceMsg = `User response to the install prompt: '${outcome}'`;
                toastr["info"](userChoiceMsg);
                console.log(userChoiceMsg);
-               if (outcome && outcome.outcome === "accepted") {
-                    console.log("User accepted install prompt.  Setting 'was_installed' cookie.");
+               if (outcome && outcome == "accepted") {
+                    console.log("EVENT - installButton ACCEPTED - User accepted install prompt.  Setting 'has_beenInstalled' cookie.");
                     setCookie("is_installable", true);
-                    setCookie("was_installed", true);
+                    setCookie("has_beenInstalled", true);
                     setCookie("is_installed", true);
-                    console.log("Setting cookies: is_installed, is_installable, was_installed = true");
-               } else if (outcome && outcome.outcome === "dismissed") {
-                    console.log("User declined install prompt.");
+                    console.log("Setting cookies: is_installed, is_installable, has_beenInstalled = true");
+               } else if (outcome && outcome == "dismissed") {
+                    console.log("EVENT - installButton DECLINED - User declined install prompt.");
                     setCookie("is_installable", true);
-                    // setCookie("was_installed", true);
+                    // setCookie("has_beenInstalled", true);
                     setCookie("is_installed", false);
                     console.log("Setting cookies: is_installable = true & is_installed = false");
+               } else {
+                    console.log("Default action pending outcome...", typeof outcome, outcome);
                }
-               updateDisplayMode();
+               // updateDisplayMode();
+               getPWADisplayMode();
                // We've used the prompt, and can't use it again, throw it away
                deferredPrompt = null;
           } else {
@@ -2396,18 +2590,21 @@ $( document ).ready(function() {
      // });
 
      /* Listen for a successful installation */
-     window.addEventListener("appinstalled", async function (e){
+     window.addEventListener("appinstalled", async function (e) {
+          // console.log("EVENT - appInstalled - successful!");
+
           // window.addEventListener("appinstalled", () => {
           /* If this event happened - the app is clearly installable AND is now installed */
           setCookie("is_installable", true);
-          setCookie("was_installed", true);
+          setCookie("has_beenInstalled", true);
           setCookie("is_installed", true);
-          console.log("Setting cookies: is_installed, is_installable, was_installed = true");
+          console.log("EVENT - appinstalled -- Setting cookies: is_installed, is_installable, has_beenInstalled = true");
           updateDisplayMode();
 
           // Hide the app-provided install promotion
-          hideInstallPromotion();
-          $(".installButton").hide();
+          hideInstallPrompt();
+          // $(".installButton").hide();
+          toggleInstallButton(false);
           // Clear the deferredPrompt so it can be garbage collected
           deferredPrompt = null;
           // Optionally, send analytics event to indicate successful install
@@ -2417,29 +2614,7 @@ $( document ).ready(function() {
      });
 
      /* Update UI based on install status */
-     updateDisplayMode(getPWADisplayMode());
-
-     /* Handle cases where the app is already installed */
-     // const displayMode = getPWADisplayMode();
-     // console.log('displayMode:',displayMode);
-
-     // switch (displayMode) {
-     //      case "twa":
-     //      case "standalone":
-     //           console.log("removing installButton");
-     //           $(".installButton").remove();
-     //           break;
-     //      case "browser":
-     //           $(".installButton").show();
-     //           console.log("showing installButton");
-     //           break;
-     //      default:
-     //           console.log("default case");
-     //           break;
-     // }
-     //
-     // /* Show the Displaymode in header */
-     // $("#displayMode").text(displayMode);
+     updateDisplayMode();
 
      /* Track when the display mode changes */
      window.matchMedia("(display-mode: standalone)").addEventListener("change", (evt) => {
@@ -2450,26 +2625,181 @@ $( document ).ready(function() {
           // Log display mode change to analytics
           console.log("DISPLAY_MODE_CHANGED - Perhaps installed?", displayMode);
           updateDisplayMode(displayMode);
+          toggleInstallButton();
      });
 
+     // Should really be earlier but adding here as needs after we evaulate the displayMode/is_currentlyInStandaloneMode
+     toggleInstallButton();
 
-
-
+     // window.addEventListener("DOMContentLoaded", function () {
+     //      window.matchMedia("(display-mode: standalone)").addListener(function (e) {
+     //           if (e.matches) {
+     //                installed = true;
+     //           }
+     //      });
+     //      window.matchMedia("(display-mode: fullscreen)").addListener(function (e) {
+     //           if (e.matches) {
+     //                installed = true;
+     //           }
+     //      });
+     //      window.matchMedia("(display-mode: minimal-ui)").addListener(function (e) {
+     //           if (e.matches) {
+     //                installed = true;
+     //           }
+     //      });
+     // });
 
      /* ------------------------------------------------------------------------------------------------ */
 
-     // toastr["success"]("Loaded Successfully");
+     // if (sessionStorage.getItem("#install-modal") !== "true") {
+     // sessionStorage.setItem("#install-modal", "true");
+     // }
+     // $(".install-modal-close").on("click", function () {
+     //      $("#install-modal").css("display", "none");
+     // });
+
+     // setTimeout(function (){
+     //      console.log("Fired Install Prompt!");
+     //      $("#install-modal").modal("show");
+     // }, 1000);
+
+     // $("#popup").animate({ bottom: "-14%" }, 1000).animate({ bottom: "-4%" }, 75).animate({ bottom: "-14%" }, 75);
+     // $(".popup-close-icon").on("click", function () {
+     //      $("#popup").animate({ bottom: "1000px" }, 500, function () {
+     //           $(this).remove();
+     //      });
+     // });
+     // });
 });
 
-// function loadingDone() {
-//      console.log("ONLOAD!");
-//           setTimeout(
-//                (function countdown() {
-//                     console.log("now!");
-//                     $(".searchButton").trigger("click");
-//                }),
-//                1000
-//           );
-//           // $(".searchButton").trigger("click");
-// }
-// window.onload = loadingDone;
+function evaluateInstallPrompt(triggerEvent) {
+     console.log("installPrompt()", triggerEvent);
+
+     /* Check first if already installed */
+     // TODO: INSTALLING PWA DOES NOT SHARE COOKIES WITH SAFARI IN IOS GRRRRR!
+     // TODO: Workaround: https://www.netguru.com/codestories/how-to-share-session-cookie-or-state-between-pwa-in-standalone-mode-and-safari-on-ios
+     // TODO: Workaround: https://stackoverflow.com/questions/62669966/how-to-maintain-login-status-in-a-pwa-initially-loaded-via-safari-14-ios-14
+     if (getCookie("is_installed") == true) {
+          let message = "App is already installed - Suppressing the install prompt!";
+          console.log(message);
+          toastr["info"](message);
+          return false;
+     } else {
+          console.log("is_installed cookie says:", getCookie("is_installed"));
+     }
+
+     /* Suppress prompt if current window is Standalone */
+     if (getCookie("is_currentlyInStandaloneMode") == true) {
+          let message = "App appears to be running in a Standalone or PWA-type window. Suppressing the install prompt!";
+          console.log(message);
+          toastr["info"](message);
+          return false;
+     }
+
+     /* Supress prompt if unsufficient time since we last prompted this user */
+     /* To avoid annoying users we will update the last_prompted_at cookie each time we show the prompt */
+     tlv_config.last_prompted_at = getCookie("last_prompted_at") * 1; // We *1 to make it an integer
+     tlv_config.last_evaluated_at = Date.parse(new Date());
+     tlv_config.ms_since_last_prompt = tlv_config.last_evaluated_at - tlv_config.last_prompted_at
+     tlv_config.ms_timeout_before_next_prompt = 300000;
+     console.log("----------------------------------------------");
+     console.log("User last prompted at :", tlv_config.last_prompted_at, new Date(tlv_config.last_prompted_at));
+     console.log("The current time is   :", tlv_config.last_evaluated_at, new Date(tlv_config.last_evaluated_at));
+     console.log("Time since last prompt:", tlv_config.ms_since_last_prompt, printSecondsValueAsTimeText(tlv_config.ms_since_last_prompt / 1000)), " ago.";
+     console.log("----------------------------------------------");
+     if (tlv_config.ms_since_last_prompt < tlv_config.ms_timeout_before_next_prompt) {
+          /* Suppress prompt if it has been less than 10mins since last prompt */
+          let message = "It has not yet been "+tlv_config.ms_timeout_before_next_prompt+" milliseconds since last prompt. Suppressing the install prompt!";
+          console.log(message);
+          toastr["info"](message);
+          return false;
+     }
+
+
+     /* Check if installable (show button) or not (show iOS instructions) */
+     if (getCookie("is_installable") !== true && getCookie("is_ios") == true && getCookie("is_ios_chrome") !== true) {
+          console.log("CLASSIC IOS - show 'add to home-screen' instructions");
+          /* CLASSIC IOS/SAFARI - Change instructions to show 'add to home-screen' */
+          $(".modal .installable-install-app").hide();
+          $(".modal .ios-add-to-home-screen").show();
+          // $("#install-modal").modal("show");
+          showInstallPrompt(triggerEvent);
+     } else if (getCookie("is_installable") !== true && getCookie("is_ios") == true && getCookie("is_ios_chrome") == true) {
+          console.log("IOS + CHROME - Advise to use Safari");
+          /* IOS + CHROME - Update message to advice Safari instead */
+          $(".modal .installable-install-app").hide();
+          $(".modal .ios-add-to-home-screen").hide();
+          $(".modal .en .install-prompt-message").html("Chrome on iOS does not support installation!<br>Please try Safari instead.");
+          $(".modal .he .install-prompt-message").html("Chrome ב- iOS אינו תומך בהתקנה! <br> אנא השתמש ב- Safari כדי להוסיף למסך הבית.");
+          // $("#install-modal").modal("show");
+          showInstallPrompt(triggerEvent);
+     } else if (getCookie("is_installable") == true && getCookie("is_ios") == true) {
+          console.log("CONFUSED IOS - show 'install app' button");
+          /* CONFUSED IOS - Update message and show install button */
+          $(".modal .installable-install-app").show();
+          $(".modal .ios-add-to-home-screen").hide();
+          $(".modal .en .install-prompt-message").html("Your iOS device supports installation!<br>Click below to install.");
+          $(".modal .he .install-prompt-message").html("מכשיר ה- iOS שלך תומך בהתקנה! <br> לחץ על הלחצן למטה להתקנה.");
+          showInstallPrompt(triggerEvent);
+     } else if (getCookie("is_installable") !== true) {
+          let message = "Apps are NOT installable here!  Suppressing the install prompt!";
+          console.log(message);
+          toastr["info"](message);
+          return false;
+     } else {
+          console.log("Installable - show prompt");
+          /* Ensure instructions show 'install app' button */
+          $(".modal .ios-add-to-home-screen").hide();
+          $(".modal .installable-install-app").show();
+          showInstallPrompt(triggerEvent);
+     }
+}
+
+ function printSecondsValueAsTimeText(n) {
+      var day = parseInt(n / (24 * 3600));
+      n = n % (24 * 3600);
+      var hour = parseInt(n / 3600);
+      n %= 3600;
+      var minutes = n / 60;
+      n %= 60;
+      var seconds = n;
+      return (day + " " + "days " + hour + " " + "hours " + minutes.toFixed() + " " + "minutes " + seconds.toFixed() + " " + "seconds ");
+ }
+
+
+function showInstallPrompt(triggerEvent) {
+     // See also hideInstallPrompt();
+     console.log("showInstallPrompt()", triggerEvent);
+     // To avoid annoying the user, we will log the current time so we can wait sufficient time before showing the prompt again
+     setCookie("last_prompted_at", Date.parse(new Date()) );
+     $("#install-modal").modal("show");
+}
+
+
+function loadingDone() {
+     console.log("ONLOAD!");
+          setTimeout(
+               (function countdown() {
+                    console.log("Fired Install Prompt! (window.onload)");
+                    evaluateInstallPrompt("window.onload");
+                    // console.log(navigator.userAgent);
+                    // if(!!navigator.appName){
+                    //      toastr["success"](navigator.appName);
+                    // };
+                    // if(!!navigator.vendor){
+                    //      toastr["success"](navigator.vendor);
+                    // };
+                    // if(!!navigator.userAgentData) {
+                    //      var brands = JSON.stringify(navigator.userAgentData.brands).replace(/"/g, "");
+                    //      toastr["success"](brands);
+                    // } else {
+                    //      toastr["error"]("userAgentData not found");
+                    // }
+
+
+               }),
+               1000
+          );
+          // $(".searchButton").trigger("click");
+}
+window.onload = loadingDone;

@@ -6,7 +6,7 @@
      "background_color": "#ffffff",
      "display": "standalone",
      "orientation": "portrait",
-     "start_url": "/telaviv_beaches/",
+     "start_url": "/telaviv_beaches/?standalone=true",
      "scope": "/telaviv_beaches/",
      "icons": [
           {

@@ -510,6 +510,13 @@ a.tlv-link:active {
      border-radius: 5px;
 }
 
+.toggle-hide {
+     display: none;
+}
+
+.toggle-show {
+     display: block;
+}
 
 
 
